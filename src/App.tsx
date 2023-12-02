@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import "./App.css";
 import Header from "./layout/header/Header";
 import Footer from "./layout/footer/Footer";
-import theme from "./utils/theme/theme";
+import {lightTheme, darkTheme} from "./utils/theme/theme";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import {
     Box,
@@ -32,7 +32,7 @@ function App() {
     }, []);
 
     return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={lightTheme}>
             <CssBaseline />
             <StyledEngineProvider injectFirst>
                 <Header></Header>
