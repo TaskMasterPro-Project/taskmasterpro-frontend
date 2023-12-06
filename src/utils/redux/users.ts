@@ -24,5 +24,5 @@ const usersSlice = createSlice({
     },
 });
 
-export const { setUser } = usersSlice.actions;
+export const { setUser, setColorMode } = usersSlice.actions;
 export default usersSlice.reducer;

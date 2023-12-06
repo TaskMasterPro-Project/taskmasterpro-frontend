@@ -43,7 +43,7 @@ const getTheme = (mode: ThemeMode) => createTheme({
       main: primary.primary600,
       light: primary.primary400,
       dark: primary.primary800,
-      contrastText: '#fff'
+      contrastText: mode == 'dark' ? '#fff' : '#000'
     },
     secondary: {
       main: mode === 'dark' ? secondary.secondary800 : secondary.secondary200,

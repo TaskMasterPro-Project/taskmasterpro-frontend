@@ -8,7 +8,7 @@ export const getProjects = async (): Promise<Project[]> => {
     return data;
 };
 
-export const getUpcomingTasks = async (): Promise<Task[]> => {
-    const { data } = await axiosInstance.get("/tasks");
+export const getTasksForProject = async (projectId: number): Promise<Task[]> => {
+    const { data } = await axiosInstance.get(`/tasks?projectId=${projectId}`);
     return data;
 };

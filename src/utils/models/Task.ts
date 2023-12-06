@@ -1,8 +1,8 @@
 export type Task = {
     id: string;
-    name: string;
+    title: string;
     description: string;
-    dueDate: Date;
+    dueDate: string;
     assignees: string[],
     labels: string[]
 }
