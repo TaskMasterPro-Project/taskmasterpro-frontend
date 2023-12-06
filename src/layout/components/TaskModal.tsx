@@ -23,6 +23,7 @@ import ControlPointOutlinedIcon from '@mui/icons-material/ControlPointOutlined';
 import CustomModal from './CustomModal';
 import CustomDatePicker from './CustomDatePicker';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
+import CommentsSection from './CommentsSection';
 
 
 interface TaskModalProps {
@@ -45,7 +46,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ listName }) => {
           { listName}
         </Link>
       </Box>
-      <Box sx={{ flexGrow: 1 }}>
+      <Box sx={{ flexGrow: 1, mb:(3) }} >
       <Grid container spacing={2} mt={2}>
         <Grid item xs={12} sm={6}>
           <Box sx={{display: 'flex', gap: 0.5, flexDirection: 'column'}}>
@@ -119,6 +120,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ listName }) => {
         </Grid>
       </Grid>
     </Box>
+    <CommentsSection />
     </CustomModal>
   )
 }
