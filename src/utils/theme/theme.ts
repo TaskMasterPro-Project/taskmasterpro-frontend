@@ -1,7 +1,7 @@
 import { purple, blue, green, yellow, grey } from "@mui/material/colors";
 import { createTheme } from "@mui/material/styles";
 
-const primary = {
+export const primary = {
     primary50: '#E0FCFF',
     primary100: '#BEF8FD',
     primary200: '#87EAF2',
@@ -14,7 +14,7 @@ const primary = {
     primary900: '#044E54'
   };
   
-  const secondary = {
+export const secondary = {
     secondary50: '#F0F4F8',
     secondary100: '#D9E2EC',
     secondary200: '#BCCCDC',
