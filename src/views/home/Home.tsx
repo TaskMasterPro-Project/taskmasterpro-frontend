@@ -272,7 +272,7 @@ const HomePage: React.FC = () => {
                 justifyContent="flex-end"
                 margin="5px"
             >
-                <Button
+                {projects.length > 0 && (<Button
                     endIcon={
                         <ArrowCircleRightIcon
                             sx={(theme) => ({
@@ -280,10 +280,10 @@ const HomePage: React.FC = () => {
                             })}
                         />
                     }
-                    sx={{ marginTop: "6px", color: "#fff" }}
+                    sx={(theme) => ({ marginTop: "6px", color: theme.palette.primary.contrastText })}
                 >
                     Open Project Board
-                </Button>
+                </Button>)}
             </Box>
         </Box>
     );
