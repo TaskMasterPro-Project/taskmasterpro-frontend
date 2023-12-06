@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import "./App.css";
 import Header from "./layout/header/Header";
-import Footer from "./layout/footer/Footer";
-import {lightTheme, darkTheme} from "./utils/theme/theme";
+import { lightTheme, darkTheme } from "./utils/theme/theme";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import {
     Box,
@@ -31,21 +30,26 @@ function App() {
         }
     }, []);
 
+    //check use preferences for theme and inject
+    const colorMode = useAppSelector((state) => state.users.colorMode);
+    const theme = colorMode === "light" ? lightTheme : darkTheme;
+
     return (
-        <ThemeProvider theme={lightTheme}>
+        <ThemeProvider theme={theme}>
             <CssBaseline />
             <StyledEngineProvider injectFirst>
-                <Header></Header>
-                {location.pathname === "/" ? (
-                    <Navigate to="/home" replace={true} />
-                ) : (
-                    <Container maxWidth="xl">
-                        <Box sx={{ margin: "30px 0px" }}>
+                <Box display="flex" flexDirection="column" maxHeight="100vh" height="100vh" width="100vw">
+                    <Box height="10%" maxHeight="10%">
+                        <Header></Header>
+                    </Box>
+                    {location.pathname === "/" ? (
+                        <Navigate to="/home" replace={true} />
+                    ) : (
+                        <Box sx={{ margin: "3px 0px", height: "85%", display: "flex", flexGrow: 1, width: "100vw", flexDirection: "column" }}>
                             <Outlet></Outlet>
                         </Box>
-                    </Container>
-                )}
-                <Footer></Footer>
+                    )}
+                </Box>
             </StyledEngineProvider>
         </ThemeProvider>
     );
