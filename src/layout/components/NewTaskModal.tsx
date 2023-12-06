@@ -1,27 +1,33 @@
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import { useTheme } from '@mui/material/styles';
-import { IconButton } from '@mui/material';
-import { DialogTitle } from '@mui/material';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
+import { useState } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Box,
+  TextField,
+  Divider,
+  useTheme
+} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import LabelOutlinedIcon from '@mui/icons-material/LabelOutlined';
-import ControlPointOutlinedIcon from '@mui/icons-material/ControlPointOutlined';
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
-import Divider from '@mui/material/Divider';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
-
+import ControlPointOutlinedIcon from '@mui/icons-material/ControlPointOutlined';
+import CustomDatePicker from './CustomDatePicker';
+import PrimaryButton from './PrimaryButton';
 
 
 function NewTaskModal(){
-  function closeButton(){
-    console.log('zele')
+  const [modalState, setModalState] = useState(true);
+  function HandleCloseModal(){
+    setModalState(false);
   }
+
   const theme = useTheme();
   return(
     <Dialog
-      open={true}
+      open={modalState}
       PaperProps={{
         sx: {
           minWidth: 430,
@@ -42,7 +48,7 @@ function NewTaskModal(){
     >
       <IconButton
       aria-label="close"
-      onClick={closeButton}
+      onClick={HandleCloseModal}
       sx={{
         position: 'absolute',
         right: 24,
@@ -99,17 +105,11 @@ function NewTaskModal(){
         </IconButton>
     </Box>
     <Divider sx={{ borderColor: '#486581', marginBlock: (1) }} />
-    <Box display="flex" gap={1.5} alignItems="center">
+    <Box display="flex" gap={1.5} alignItems="center" mt={2}>
         <CalendarMonthOutlinedIcon sx={{color: (theme) => theme.palette.text.secondary}}/>
-        <div style={{border: '1px solid white'}}>{'placeholder user'}</div>
-        <IconButton 
-          sx={{
-            ml: 'auto',
-            color: (theme) => theme.palette.text.secondary,
-          }}>
-          <ControlPointOutlinedIcon />
-        </IconButton>
+        <CustomDatePicker />
     </Box>
+    <PrimaryButton text={'Add task'}/>
   </DialogContent>
 </Dialog>
   )
