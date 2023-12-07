@@ -4,5 +4,6 @@ export type Task = {
     description: string;
     dueDate: string;
     assignees: string[],
-    labels: string[]
+    labels: string[],
+    categoryId: number;
 }
