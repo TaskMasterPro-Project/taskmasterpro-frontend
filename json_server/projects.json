@@ -1,0 +1,35 @@
+{
+    "projects": [
+        { "id": 1, "name": "Project 1" },
+        { "id": 2, "name": "Project 2" }
+    ],
+    "tasks": [
+        {
+            "id": 101,
+            "title": "Task1",
+            "projectId": 1,
+            "description": "Task 1 for Project 1",
+            "dueDate": "2023-12-31",
+            "labels": ["frontend"],
+            "assignees": ["pesho", "joro"]
+        },
+        {
+            "id": 102,
+            "title": "Task1",
+            "projectId": 1,
+            "description": "Task 2 for Project 1",
+            "dueDate": "2023-11-30",
+            "labels": ["backend"],
+            "assignees": ["pesho", "joro"]
+        },
+        {
+            "id": 201,
+            "title": "Task1",
+            "projectId": 2,
+            "description": "Task 1 for Project 2",
+            "dueDate": "2024-01-15",
+            "labels": ["frontend", "backend"],
+            "assignees": ["pesho", "joro"]
+        }
+    ]
+}
