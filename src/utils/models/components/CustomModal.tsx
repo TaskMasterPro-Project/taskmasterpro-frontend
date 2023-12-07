@@ -19,6 +19,7 @@ interface CustomModalProps {
 
 const CustomModal: React.FC<CustomModalProps> = ({ open, onClose, title, titleFontSize, children }) => {
   const theme = useTheme();
+  const mode = theme.palette.mode;
 
   return (
     <Dialog
@@ -26,7 +27,7 @@ const CustomModal: React.FC<CustomModalProps> = ({ open, onClose, title, titleFo
       onClose={onClose}
       PaperProps={{
         sx: {
-          minWidth: 430,
+          minWidth: {sm: 430, xs: 300},
           border: 1,
           borderColor: '#98AEEB',
           borderRadius: '15px',
@@ -38,7 +39,7 @@ const CustomModal: React.FC<CustomModalProps> = ({ open, onClose, title, titleFo
       <DialogContent
         sx={{
           padding: theme.spacing(3, 4),
-          backgroundColor: theme.palette.secondary.dark,
+          backgroundColor: theme.palette.background.default,
           position: 'relative',
         }}
       >
@@ -49,18 +50,19 @@ const CustomModal: React.FC<CustomModalProps> = ({ open, onClose, title, titleFo
             position: 'absolute',
             right: 24,
             top: 16,
-            color: (theme) => theme.palette.grey[300],
+            color: theme.palette.text.primary,
           }}
         >
           <CloseIcon />
         </IconButton>
         <DialogTitle sx={{ mb: 1, p: 0, maxWidth: '90%', fontWeight: 'bold', fontSize: titleFontSize }}>
-          <Typography variant='h2' fontSize={'inherit'} >{title}</Typography>
+          <Typography variant='h2' fontSize={'inherit'} fontWeight={'bold'}>{title}</Typography>
         </DialogTitle>
         {children}
       </DialogContent>
     </Dialog>
   );
 };
+//n200 n600
 
 export default CustomModal;

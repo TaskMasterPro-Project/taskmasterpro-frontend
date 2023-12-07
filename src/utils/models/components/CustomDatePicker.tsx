@@ -5,7 +5,6 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useTheme } from '@mui/material/styles';
 
 function CustomDatePicker() {
-  const theme = useTheme();
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker 
