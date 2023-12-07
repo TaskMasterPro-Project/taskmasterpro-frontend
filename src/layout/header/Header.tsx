@@ -11,11 +11,12 @@ import {
 import { Box } from "@mui/system";
 import React from "react";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import StyledAvatar from "../../views/home/components/StyledAvatar";
+import StyledAvatar from "../../widgets/StyledAvatar";
 import SearchIcon from "@mui/icons-material/Search";
 import { useAppSelector } from "../../utils/redux/store";
 import { useDispatch } from "react-redux";
 import { setColorMode } from "../../utils/redux/users";
+import { useNavigate } from "react-router-dom";
 
 type Props = {};
 
@@ -117,6 +118,7 @@ function Header({}: Props) {
 
     const theme = useAppSelector((state) => state.users.colorMode);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     return (
         <Box
@@ -129,12 +131,7 @@ function Header({}: Props) {
             })}
         >
             <Box display="flex" alignItems="center">
-                {/* <Box padding="0px" sx={{backgroundColor: "red"}}>
-                    <Typography variant="h2" sx={{ fontWeight: "bold" }}>
-                        T
-                    </Typography>
-                </Box> */}
-                <Typography variant="h4" sx={{ fontWeight: "bold", color: "#fff" }}>
+                <Typography variant="h4" sx={{ fontWeight: "bold", color: "#fff" }} onClick={() => navigate("/")}>
                     TaskMasterPro
                 </Typography>
             </Box>

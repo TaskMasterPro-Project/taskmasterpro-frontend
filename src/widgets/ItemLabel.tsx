@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 import React from "react";
-import { useAppSelector } from "../../../utils/redux/store";
-import { secondary } from "../../../utils/theme/theme";
+import { useAppSelector } from "../utils/redux/store";
+import { secondary } from "../utils/theme/theme";
 
 type Props = {label: string};
 

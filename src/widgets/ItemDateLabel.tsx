@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import React from "react";
-import { primary } from "../../../utils/theme/theme";
+import { primary } from "../utils/theme/theme";
 
 type Props = {
     dueDate: string;
