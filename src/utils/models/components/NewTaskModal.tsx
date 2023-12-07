@@ -19,7 +19,7 @@ import ControlPointOutlinedIcon from '@mui/icons-material/ControlPointOutlined';
 import ListIcon from '@mui/icons-material/List';
 import CustomDatePicker from './CustomDatePicker';
 import PrimaryButton from './PrimaryButton';
-import CustomModal from './CustomModal';
+import StyledModal from './StyledModal';
 import ItemLabel from '../../../widgets/ItemLabel';
 import StyledAvatar from '../../../widgets/StyledAvatar';
 import { styled, useTheme } from "@mui/material/styles";
@@ -67,7 +67,7 @@ function NewTaskModal(){
   }));
 
   return(
-      <CustomModal open={modalState} onClose={HandleCloseModal} title='Create new task' titleFontSize={32}>
+      <StyledModal open={modalState} onClose={HandleCloseModal} title='Create new task' titleFontSize={32}>
         <TextField
           multiline
           color='secondary'
@@ -137,7 +137,7 @@ function NewTaskModal(){
           </Stack>
         </Stack>
         <PrimaryButton text={'Add task'}/>
-  </CustomModal>
+  </StyledModal>
   )
 }
 

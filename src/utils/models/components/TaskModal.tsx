@@ -20,7 +20,7 @@ import LabelOutlinedIcon from '@mui/icons-material/LabelOutlined';
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import ControlPointOutlinedIcon from '@mui/icons-material/ControlPointOutlined';
-import CustomModal from './CustomModal';
+import StyledModal from './StyledModal';
 import CustomDatePicker from './CustomDatePicker';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import CommentsSection from './CommentsSection';
@@ -41,7 +41,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ listName }) => {
   const theme = useTheme();
 
   return(
-    <CustomModal open={modalState} onClose={HandleCloseModal} title='ProjectsController - Create Project, Delete Project, Edit project' titleFontSize={24}>
+    <StyledModal open={modalState} onClose={HandleCloseModal} title='ProjectsController - Create Project, Delete Project, Edit project' titleFontSize={24}>
       <Box sx={{fontSize: '14px', color: '#BCCCDC' }}>
         {'In List: '}
         <Link href='#' color='inherit' sx={{":hover": {color: '#14919B'}}}>
@@ -83,7 +83,6 @@ const TaskModal: React.FC<TaskModalProps> = ({ listName }) => {
               <Stack direction="row" alignItems={'center'} spacing={1} flexWrap={'wrap'}>
                 <ItemLabel label='Front-end' />
                 <ItemLabel label='Back-end' />
-                
               </Stack>
               <IconButton size='small'
                   sx={{
@@ -125,7 +124,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ listName }) => {
       </Grid>
     </Box>
     <CommentsSection />
-    </CustomModal>
+    </StyledModal>
   )
 }
 
