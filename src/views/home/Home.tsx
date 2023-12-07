@@ -7,34 +7,36 @@ import { Project } from "../../utils/models/Project";
 import { Task } from "../../utils/models/Task";
 import { TaskItem } from "./components/TaskItem";
 import { useDispatch } from "react-redux";
-import { setSelectedProjectId } from "../../utils/redux/projects";
+import { setSelectedProject } from "../../utils/redux/projects";
 import { useAppSelector } from "../../utils/redux/store";
+import { useNavigate } from "react-router-dom";
 
 // Main Page component
 const HomePage: React.FC = () => {
     const dispatch = useDispatch();
     const [projects, setProjects] = useState<Project[]>([]);
     const [tasks, setTasks] = useState<Task[]>([]);
-    const selectedProjectId = useAppSelector(
-        (state) => state.projects.selectedProjectId
+    const selectedProject = useAppSelector(
+        (state) => state.projects.selectedProject
     );
     const colorMode = useAppSelector((state) => state.users.colorMode);
+    const navigate = useNavigate();    
 
     useEffect(() => {
         getProjects().then((res) => {
             setProjects(res);
             if (res.length > 0) {
-                dispatch(setSelectedProjectId(res[0].id));
+                dispatch(setSelectedProject(res[0]));
             }
         });
     }, []);
 
     useEffect(() => {
-        if (!selectedProjectId) {
+        if (!selectedProject) {
             return;
         }
 
-        getTasksForProject(selectedProjectId).then((tasks: Task[]) => {
+        getTasksForProject(selectedProject.id).then((tasks: Task[]) => {
             //sort by due date
             //limit to N number of tasks
             const sortedTasks = tasks
@@ -42,7 +44,7 @@ const HomePage: React.FC = () => {
                 .slice(0, 5);
             setTasks(sortedTasks);
         });
-    }, [selectedProjectId]);
+    }, [selectedProject]);
 
     return (
         <Box
@@ -90,7 +92,7 @@ const HomePage: React.FC = () => {
                                             padding: "20px",
                                             borderRadius: "10px",
                                             backgroundColor:
-                                                selectedProjectId === project.id
+                                                selectedProject?.id === project.id
                                                     ? theme.palette.primary.main
                                                     : "secondary",
                                             "&:hover": {
@@ -99,7 +101,7 @@ const HomePage: React.FC = () => {
                                         })}
                                         onClick={() =>
                                             dispatch(
-                                                setSelectedProjectId(project.id)
+                                                setSelectedProject(project)
                                             )
                                         }
                                     >
@@ -281,6 +283,7 @@ const HomePage: React.FC = () => {
                         />
                     }
                     sx={(theme) => ({ marginTop: "6px", color: theme.palette.primary.contrastText })}
+                    onClick={() => {navigate(`/board`)}}
                 >
                     Open Project Board
                 </Button>)}

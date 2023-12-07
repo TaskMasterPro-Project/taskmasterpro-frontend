@@ -8,10 +8,10 @@ import {
     Typography,
 } from "@mui/material";
 import { primary, secondary } from "../../../utils/theme/theme";
-import StyledAvatar from "./StyledAvatar";
+import StyledAvatar from "../../../widgets/StyledAvatar";
 import { useAppSelector } from "../../../utils/redux/store";
-import ItemDateLabel from "./ItemDateLabel";
-import ItemLabel from "./ItemLabel";
+import ItemDateLabel from "../../../widgets/ItemDateLabel";
+import ItemLabel from "../../../widgets/ItemLabel";
 
 // The interface for task items
 interface TaskItemProps {

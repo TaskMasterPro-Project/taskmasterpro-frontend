@@ -1,23 +1,24 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { User } from "../models/User";
+import { Project } from "../models/Project";
 
 export interface ProjectsSliceState {
-    selectedProjectId?: number;
+    selectedProject?: Project;
 }
 
 const initialState: ProjectsSliceState = {
-    selectedProjectId: undefined
+    selectedProject: undefined
 };
 
 const projectsSlice = createSlice({
     name: "projects",
     initialState,
     reducers: {
-        setSelectedProjectId(state, action: PayloadAction<number>) {
-            state.selectedProjectId = action.payload;
+        setSelectedProject(state, action: PayloadAction<Project>) {
+            state.selectedProject = action.payload;
         },
     },
 });
 
-export const { setSelectedProjectId } = projectsSlice.actions;
+export const { setSelectedProject } = projectsSlice.actions;
 export default projectsSlice.reducer;
