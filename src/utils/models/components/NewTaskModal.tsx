@@ -1,13 +1,9 @@
 import { useState } from 'react';
 import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
   IconButton,
   Box,
   TextField,
   Divider,
-  useTheme,
   Typography
 } from '@mui/material';
 import LabelOutlinedIcon from '@mui/icons-material/LabelOutlined';
@@ -17,6 +13,10 @@ import ControlPointOutlinedIcon from '@mui/icons-material/ControlPointOutlined';
 import CustomDatePicker from './CustomDatePicker';
 import PrimaryButton from './PrimaryButton';
 import CustomModal from './CustomModal';
+import ItemLabel from '../../../widgets/ItemLabel';
+import StyledAvatar from '../../../widgets/StyledAvatar';
+import { styled, useTheme } from "@mui/material/styles";
+import { secondary } from '../../theme/theme';
 
 
 function NewTaskModal(){
@@ -24,20 +24,29 @@ function NewTaskModal(){
   function HandleCloseModal(){
     setModalState(false);
   }
+
+  const MyThemeComponent = styled('div')(({ theme }) => ({
+    color: theme.palette.primary.contrastText,
+    backgroundColor: theme.palette.primary.main,
+    padding: theme.spacing(1),
+    borderRadius: theme.shape.borderRadius,
+  }));
+
+  // Check for the theme
   const theme = useTheme();
+  const mode = theme.palette.mode;
 
   return(
       <CustomModal open={modalState} onClose={HandleCloseModal} title='Create new task' titleFontSize={32}>
         <TextField
-          id="outlined-multiline-static"
           multiline
-          rows={4}
           color='secondary'
+          rows={4}
           defaultValue="Create task"
           variant="outlined" 
           sx={{
             width: '100%', 
-            backgroundColor: '#334E68',
+            backgroundColor: mode === 'dark' ? secondary.secondary700 : '#FAFAFA',
             borderRadius: '15px',
             mb: 2,
             '& .MuiOutlinedInput-root': {
@@ -50,7 +59,8 @@ function NewTaskModal(){
         />
         <Box display="flex" gap={1.5} alignItems="center">
           <LabelOutlinedIcon sx={{color: (theme) => theme.palette.text.secondary}}/>
-          <div style={{border: '1px solid white'}}>{'placeholder Label'}</div>
+          <ItemLabel label='Front-end'/>
+          <ItemLabel label='Front-end'/>
           <IconButton 
             sx={{
               ml: 'auto',
@@ -62,7 +72,7 @@ function NewTaskModal(){
       <Divider sx={{ borderColor: '#486581', marginBlock: (1) }} />
       <Box display="flex" gap={1.5} alignItems="center">
           <PersonAddAltOutlinedIcon sx={{color: (theme) => theme.palette.text.secondary}}/>
-          <div style={{border: '1px solid white'}}>{'placeholder user'}</div>
+          <StyledAvatar name='Pesho Petrov'/>
           <IconButton 
             sx={{
               ml: 'auto',

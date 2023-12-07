@@ -24,6 +24,8 @@ import CustomModal from './CustomModal';
 import CustomDatePicker from './CustomDatePicker';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import CommentsSection from './CommentsSection';
+import ItemLabel from '../../../widgets/ItemLabel';
+import StyledAvatar from '../../../widgets/StyledAvatar';
 
 
 interface TaskModalProps {
@@ -56,10 +58,10 @@ const TaskModal: React.FC<TaskModalProps> = ({ listName }) => {
             </Stack>
             <Stack  direction="row" alignItems={'center'}>
               <Stack direction="row" alignItems={'center'} spacing={-1}>
-                <Avatar sx={{ width: '30px', height: '30px'}}>H</Avatar>
-                <Avatar sx={{ bgcolor: '#FCEFC7', width: '30px', height: '30px' }}>N</Avatar>
-                <Avatar sx={{ bgcolor: '#BED0F7', width: '30px', height: '30px' }}>OP</Avatar>
-                <Avatar sx={{ bgcolor: '#BED0F7', width: '30px', height: '30px' }}>K</Avatar>
+              <StyledAvatar name='Alexander'/>
+              <StyledAvatar name='Plexander'/>
+              <StyledAvatar name='Gosho Geshev'/>
+              <StyledAvatar name='Gosho Geshev'/>
               </Stack>
               <IconButton size='small'
                   sx={{
@@ -79,7 +81,9 @@ const TaskModal: React.FC<TaskModalProps> = ({ listName }) => {
             </Stack>
             <Stack  direction="row" alignItems={'center'}>
               <Stack direction="row" alignItems={'center'} spacing={1} flexWrap={'wrap'}>
-                <div style={{border: '1px solid white'}}>{'placeholder Label'}</div>
+                <ItemLabel label='Front-end' />
+                <ItemLabel label='Back-end' />
+                
               </Stack>
               <IconButton size='small'
                   sx={{

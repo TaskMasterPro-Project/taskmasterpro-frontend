@@ -17,6 +17,8 @@ import "@fontsource/roboto/700.css";
 import { useAppSelector } from "./utils/redux/store";
 import { useDispatch } from "react-redux";
 import { setUser } from "./utils/redux/users";
+import TaskModal from "./utils/models/components/TaskModal";
+import NewTaskModal from "./utils/models/components/NewTaskModal";
 
 function App() {
     const location = useLocation();
@@ -49,6 +51,8 @@ function App() {
                             <Outlet></Outlet>
                         </Box>
                     )}
+                    <NewTaskModal />
+                    <TaskModal listName="Create Task"/>
                 </Box>
             </StyledEngineProvider>
         </ThemeProvider>
