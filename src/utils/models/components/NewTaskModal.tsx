@@ -10,7 +10,13 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  AvatarGroup
+  AvatarGroup,
+  Popover,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  ListItemButton
 } from '@mui/material';
 import LabelOutlinedIcon from '@mui/icons-material/LabelOutlined';
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
@@ -24,10 +30,11 @@ import ItemLabel from '../../../widgets/ItemLabel';
 import StyledAvatar from '../../../widgets/StyledAvatar';
 import { styled, useTheme } from "@mui/material/styles";
 import { secondary } from '../../theme/theme';
+import AddLabelButton from './AddLabelButton';
 
 //Dummy data
 const taskContributors = [
-  'Pesho Petrov'
+  'Pesho Petrov', 'Pesho Petrov', 'Pesho Petrov'
 ]
 interface ContributorsProps {
   taskContributors: string[]; 
@@ -66,6 +73,21 @@ function NewTaskModal(){
     marginBlock: (8)
   }));
 
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
+
+  const [label, setLabel] = useState(false);
+
   return(
       <StyledModal open={modalState} onClose={HandleCloseModal} title='Create new task' titleFontSize={32}>
         <TextField
@@ -93,25 +115,50 @@ function NewTaskModal(){
               <ItemLabel label='Front-end'/>
               <ItemLabel label='Design'/>
           </Stack>
-          <IconButton 
-            sx={{
-              ml: 'auto',
-              color: theme.palette.text.secondary,
-            }}>
-            <ControlPointOutlinedIcon />
-          </IconButton>
+          <AddLabelButton />
         </Stack>
         <StyledDivider/>
         <Stack direction={'row'} gap={1.5} alignItems="center">
           <PersonAddAltOutlinedIcon sx={{color: theme.palette.text.secondary}}/>
             <Contributors taskContributors={taskContributors}/>
-          <IconButton 
+            <IconButton 
+            onClick={handleClick}
             sx={{
               ml: 'auto',
               color: theme.palette.text.secondary,
             }}>
             <ControlPointOutlinedIcon />
           </IconButton>
+          <Popover
+            id={id}
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+          >
+            <List disablePadding>
+            {taskContributors.map((user, index) => (
+              <>
+                <ListItem key={index}  disablePadding >
+                <ListItemButton sx={{paddingInline: 1}}>
+                  <ListItemAvatar  sx={{ minWidth: '46px' }}>
+                    <StyledAvatar name='Pesho Petrov' width='36px' colorful/>
+                  </ListItemAvatar>
+                  <ListItemText primary={user} />
+                </ListItemButton>
+                </ListItem>
+                <Divider component="li" />
+              </>
+            ))}
+          </List>
+        </Popover>
         </Stack>
         <StyledDivider/>
         <Stack direction={{sm: 'row', xs: 'column'}} gap={{sm: 1.5, xs: 2}} alignItems={{sm: 'flex-end', xs: 'flex-start'}} mt={2} justifyContent={'space-between'}>
