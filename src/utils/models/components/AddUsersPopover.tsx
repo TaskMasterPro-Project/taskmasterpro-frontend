@@ -63,7 +63,7 @@ const AddUsersPopover: React.FC<Props> = ({projectMembers}: Props) => {
                 <ListItem key={index}  disablePadding >
                 <ListItemButton sx={{paddingInline: 1}}>
                   <ListItemAvatar  sx={{ minWidth: '46px' }}>
-                    <StyledAvatar name='Pesho Petrov' width='36px' colorful/>
+                    <StyledAvatar name={member} width='36px' colorful/>
                   </ListItemAvatar>
                   <ListItemText primary={member} />
                 </ListItemButton>

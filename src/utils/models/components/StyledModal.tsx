@@ -15,9 +15,10 @@ interface CustomModalProps {
   title: string;
   children: React.ReactNode;
   titleFontSize: number;
+  minWidth?: number
 }
 
-const CustomModal: React.FC<CustomModalProps> = ({ open, onClose, title, titleFontSize, children }) => {
+const CustomModal: React.FC<CustomModalProps> = ({ open, onClose, title, titleFontSize, minWidth, children }) => {
   const theme = useTheme();
   const mode = theme.palette.mode;
 
@@ -27,7 +28,7 @@ const CustomModal: React.FC<CustomModalProps> = ({ open, onClose, title, titleFo
       onClose={onClose}
       PaperProps={{
         sx: {
-          minWidth: {sm: 430, xs: 300},
+          minWidth: {sm: minWidth ? minWidth : 430, xs: 300},
           border: 1,
           borderColor: '#98AEEB',
           borderRadius: '15px',
