@@ -24,6 +24,7 @@ const CustomModal: React.FC<CustomModalProps> = ({ open, onClose, title, titleFo
 
   return (
     <Dialog
+      scroll='body'
       open={open}
       onClose={onClose}
       PaperProps={{

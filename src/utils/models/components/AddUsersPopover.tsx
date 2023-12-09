@@ -1,6 +1,4 @@
 import * as React from 'react';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import ControlPointOutlinedIcon from '@mui/icons-material/ControlPointOutlined';
 import StyledAvatar from '../../../widgets/StyledAvatar';
@@ -15,10 +13,11 @@ import { Popover,
 import { useTheme } from "@mui/material/styles";
 
 interface Props{
-  projectMembers: string[]
+  projectMembers: string[],
+  marginLeft? : string | number,
 }
 
-const AddUsersPopover: React.FC<Props> = ({projectMembers}: Props) => {
+const AddUsersPopover: React.FC<Props> = ({projectMembers, marginLeft}) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const theme = useTheme();
 
@@ -35,10 +34,10 @@ const AddUsersPopover: React.FC<Props> = ({projectMembers}: Props) => {
 
   return (
     <>
-      <IconButton 
+          <IconButton 
             onClick={handleClick}
             sx={{
-              ml: 'auto',
+              ml: marginLeft ? marginLeft : 'auto',
               color: theme.palette.text.secondary,
             }}>
             <ControlPointOutlinedIcon />

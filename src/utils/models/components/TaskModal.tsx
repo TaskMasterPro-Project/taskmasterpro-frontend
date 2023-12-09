@@ -97,7 +97,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ listName }) => {
               </Stack>
               <Stack  direction="row" alignItems={'center'}>
                 <Contributors taskContributors={taskContributors}/>
-                <AddUsersPopover projectMembers={taskContributors}/>
+                <AddUsersPopover marginLeft='10px' projectMembers={taskContributors}/>
               </Stack>
             </Stack>
           </Grid>
@@ -112,7 +112,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ listName }) => {
                   <ItemLabel label='Front-end' />
                   <ItemLabel label='Back-end' />
                 </Stack>
-                <AddLabelButton />
+                <AddLabelButton marginLeft='10px'/>
               </Stack>
             </Box>
           </Grid>
@@ -137,8 +137,8 @@ const TaskModal: React.FC<TaskModalProps> = ({ listName }) => {
                   aria-label="notifications"
                   name="notifications"
                 >
-                  <FormControlLabel value="enabled" control={<Radio />} label="Enabled" />
-                  <FormControlLabel value="disabled" control={<Radio />} label="Disabled" />
+                  <FormControlLabel style={{color: theme.palette.text.secondary}} value="enabled" control={<Radio />} label="Enabled"/>
+                  <FormControlLabel style={{color: theme.palette.text.secondary}} value="disabled" control={<Radio />} label="Disabled" />
                 </RadioGroup>
               </FormControl>
             </Box>

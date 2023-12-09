@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState} from 'react';
 import {
   Card,
   CardContent,
@@ -7,10 +7,20 @@ import {
   IconButton,
   TextField,
   Typography,
-  Button
+  Button,
+  Stack,
+  Box,
+  Menu,
+  MenuItem
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useTheme } from '@mui/material';
+
+import { secondary } from '../../theme/theme';
+import StyledAvatar from '../../../widgets/StyledAvatar';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 interface Comment {
   id: string;
@@ -40,44 +50,108 @@ const comments: Comment[] = [
   },
   {
     id: '4',
-    author: 'Manuel',
+    author: 'Yorick',
     text: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
     date: 'Just now',
   },
 ];
 
+
 const CommentsSection: React.FC = () => {
+  const theme = useTheme();
+  const mode = theme.palette.mode;
+
+  const [buttonExpanded, setButtonExpanded] = useState(false);
+
+  function handleExpandButton(){
+    setButtonExpanded((prevState) => !prevState);
+  }
+
+  // Comments options logic
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const openCommentOptions = Boolean(anchorEl);
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleEdit = () => {
+    // TO DO Handle edit action
+    handleClose();
+  };
+
+  const handleDelete = () => {
+    // TO DO Handle delete action
+    handleClose();
+  };
+
   return (
-    <Card sx={{  bgcolor: 'background.default' }}>
+    <Card sx={{  bgcolor: mode === 'dark' ? secondary.secondary900 : secondary.secondary50}}>
       <CardContent>
         <TextField
-          fullWidth
-          variant="outlined"
-          placeholder="Write a comment ..."
-          multiline
-          minRows={1}
-          // Handle change and submit for the TextField
-        />
-        {/* Loop through comments */}
+            multiline
+            color='secondary'
+            placeholder="Add a comment..."
+            variant="outlined" 
+            sx={{
+              width: '100%', 
+              backgroundColor: mode === 'dark' ? secondary.secondary700 : '#FAFAFA',
+              borderRadius: '5px',
+              mb: 2,
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '5px',
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#98AEEB', 
+                },
+              },
+            }}
+          />
         {comments.map((comment) => (
           <CardHeader
             key={comment.id}
             avatar={
-              <Avatar>{comment.author[0]}</Avatar>
+              <StyledAvatar name={comment.author} colorful></StyledAvatar>
             }
             action={
-              <IconButton aria-label="settings">
-                <MoreVertIcon />
-              </IconButton>
+              <Box>
+                <IconButton
+                  aria-label="more"
+                  id="options-button"
+                  aria-controls={openCommentOptions ? 'options-menu' : undefined}
+                  aria-expanded={openCommentOptions ? 'true' : undefined}
+                  aria-haspopup="true"
+                  onClick={handleClick}
+                  sx={{ml: '5px'}}>
+                  <MoreVertIcon />
+                </IconButton>
+                <Menu
+                  id="options-menu"
+                  elevation={2}
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={openCommentOptions}
+                  onClose={handleClose}>
+                  <MenuItem onClick={handleEdit}>Edit</MenuItem>
+                  <MenuItem style={{ color: 'red' }} onClick={handleDelete}>Delete</MenuItem>
+                </Menu>
+              </Box>
             }
             title={comment.text}
             subheader={comment.date}
+            sx={{alignItems: 'flex-start'}}
           />
         ))}
       </CardContent>
-      <Button onClick={() => console.log('Expand all comments')}>
-        Expand all
-      </Button>
+      <Stack alignItems={'center'} mb={1}>
+        <Button 
+          endIcon={!buttonExpanded ? <ExpandMoreIcon /> : <ExpandLessIcon /> } 
+          onClick={handleExpandButton}>
+          {!buttonExpanded ? 'Expand more' : 'Expand less'}
+        </Button>
+      </Stack>
     </Card>
   );
 };

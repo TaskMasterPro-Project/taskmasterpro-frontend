@@ -5,7 +5,11 @@ import ControlPointOutlinedIcon from '@mui/icons-material/ControlPointOutlined';
 import { useTheme } from '@mui/material/styles';
 import { Tooltip } from '@mui/material';
 
-const AddLabelButton: React.FC = () => {
+interface addLabelButtonProps {
+  marginLeft?: string | number
+}
+
+const AddLabelButton: React.FC<addLabelButtonProps> = ({marginLeft}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState('');
   const [showTooltip, setShowTooltip] = useState(false);
@@ -63,7 +67,7 @@ const AddLabelButton: React.FC = () => {
   return (
     <IconButton 
       sx={{
-        ml: 'auto',
+        ml: marginLeft ? marginLeft : 'auto',
         color: theme.palette.text.secondary,
       }}
       onClick={handleIconClick}
