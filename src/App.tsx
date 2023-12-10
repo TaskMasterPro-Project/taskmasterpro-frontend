@@ -15,7 +15,7 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { useAppSelector } from "./utils/redux/store";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./utils/redux/users";
 import TaskModal from "./utils/models/components/TaskModal";
 import NewTaskModal from "./utils/models/components/NewTaskModal";
@@ -52,7 +52,7 @@ function App() {
                         </Box>
                     )}
                     <NewTaskModal />
-                    <TaskModal listName="Create Task"/>
+                    <TaskModal listName="To do"/>
                 </Box>
             </StyledEngineProvider>
         </ThemeProvider>

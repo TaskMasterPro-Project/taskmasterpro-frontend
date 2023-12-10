@@ -2,10 +2,12 @@ import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useSelector } from "react-redux";
 import usersSlice, { UsersSliceState } from "./users";
 import projectsSlice, { ProjectsSliceState } from "./projects";
+import createTaskModalSlice, {CreateTaskModalState} from "./createTaskModal"
 
 type StoreState = {
     users: UsersSliceState;
     projects: ProjectsSliceState;
+    createTaskModal: CreateTaskModalState;
 };
 
 // save to localStorage
@@ -35,7 +37,8 @@ const persistedState = loadFromLocalStorage();
 const store = configureStore({
     reducer: {
         users: usersSlice,
-        projects: projectsSlice
+        projects: projectsSlice,
+        createTaskModal: createTaskModalSlice
     },
     preloadedState: persistedState
 });

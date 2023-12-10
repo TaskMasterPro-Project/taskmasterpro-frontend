@@ -18,11 +18,14 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { Navigate, useNavigate } from "react-router-dom";
 import CategoryMenu from "./components/CategoryMenu";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { openModal } from "../../utils/redux/createTaskModal";
+import { useDispatch } from "react-redux";
 
 
 type Props = {};
 
 function BoardPage({}: Props) {
+    const dispatch = useDispatch();
     const [tasks, setTasks] = React.useState<Task[]>([]);
     const [categories, setCategories] = React.useState<ProjectCategory[]>([]);
     const [members, setMembers] = React.useState<ProjectMember[]>([]);
@@ -206,7 +209,7 @@ function BoardPage({}: Props) {
                                 color: theme.palette.primary.contrastText,
                                 alignSelf: "flex-start",
                             })}
-                        >
+                            onClick={() => dispatch(openModal())}>
                             Add a card
                         </Button>
                     </Box>

@@ -23,6 +23,9 @@ import { styled, useTheme } from "@mui/material/styles";
 import { secondary } from '../../theme/theme';
 import AddLabelButton from './AddLabelButton';
 import AddUsersPopover from './AddUsersPopover';
+import { useDispatch } from 'react-redux';
+import { useAppSelector } from '../../redux/store';
+import { closeModal } from '../../redux/createTaskModal';
 
 //Dummy data
 const taskContributors = [
@@ -51,11 +54,12 @@ function Contributors({ taskContributors }: ContributorsProps) {
 
 
 function NewTaskModal(){
-  const [modalState, setModalState] = useState(true);
-  function HandleCloseModal(){
-    setModalState(false);
-  }
+  const dispatch = useDispatch();
+  const isNewTaskModalOpen = useAppSelector((state) => state.createTaskModal.isModalOpen);
 
+  function handleCloseModal(){
+    dispatch(closeModal());
+  }
   // Check for the theme
   const theme = useTheme();
   const mode = theme.palette.mode;
@@ -66,7 +70,7 @@ function NewTaskModal(){
   }));
 
   return(
-      <StyledModal open={modalState} onClose={HandleCloseModal} title='Create new task' titleFontSize={32}>
+      <StyledModal open={isNewTaskModalOpen} onClose={handleCloseModal} title='Create new task' titleFontSize={32}>
         <TextField
           multiline
           color='secondary'

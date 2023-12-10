@@ -10,17 +10,20 @@ import { useDispatch } from "react-redux";
 import { setSelectedProject } from "../../utils/redux/projects";
 import { useAppSelector } from "../../utils/redux/store";
 import { useNavigate } from "react-router-dom";
+import { openModal } from "../../utils/redux/createTaskModal";
 
 // Main Page component
 const HomePage: React.FC = () => {
     const dispatch = useDispatch();
     const [projects, setProjects] = useState<Project[]>([]);
     const [tasks, setTasks] = useState<Task[]>([]);
+    
     const selectedProject = useAppSelector(
         (state) => state.projects.selectedProject
     );
     const colorMode = useAppSelector((state) => state.users.colorMode);
     const navigate = useNavigate();    
+
 
     useEffect(() => {
         getProjects().then((res) => {
@@ -174,6 +177,7 @@ const HomePage: React.FC = () => {
                                         />
                                     }
                                     sx={(theme) =>  ({ marginTop: "16px", color: theme.palette.primary.contrastText })}
+                                    onClick={() => dispatch(openModal())}
                                 >
                                     Create New Task
                                 </Button>
