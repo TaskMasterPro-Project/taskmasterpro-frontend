@@ -30,6 +30,9 @@ import ItemLabel from '../../../widgets/ItemLabel';
 import StyledAvatar from '../../../widgets/StyledAvatar';
 import AddUsersPopover from './AddUsersPopover';
 import AddLabelButton from './AddLabelButton';
+import { closeTaskModal } from '../../redux/taskModal';
+import { useDispatch } from 'react-redux';
+import { useAppSelector } from '../../redux/store';
 
 
 //Dummy data
@@ -70,9 +73,10 @@ const StyledSubHeading = styled(Typography)(({theme}) => ({
 }))
 
 const TaskModal: React.FC<TaskModalProps> = ({ listName }) => {
-  const [modalState, setModalState] = useState(true);
+  const dispatch = useDispatch();
+  const isTaskModalOpen = useAppSelector((state) => state.taskModal.isTaskModalOpen);
   function HandleCloseModal(){
-    setModalState(false);
+    dispatch(closeTaskModal())
   }
 
   // Check for the theme
@@ -80,7 +84,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ listName }) => {
   const mode = theme.palette.mode;
 
   return(
-    <StyledModal open={modalState} onClose={HandleCloseModal} title='ProjectsController - Create Project, Delete Project, Edit project' titleFontSize={24} minWidth={630}>
+    <StyledModal open={isTaskModalOpen} onClose={HandleCloseModal} title='ProjectsController - Create Project, Delete Project, Edit project' titleFontSize={24} minWidth={630}>
       <Box sx={{fontSize: '14px', color: theme.palette.text.secondary }}>
         {'In List: '}
         <Link href='#' color='inherit' sx={{":hover": {color: '#14919B', fontWeight: 'bold'}}}>

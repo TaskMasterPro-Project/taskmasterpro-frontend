@@ -11,6 +11,7 @@ import { setSelectedProject } from "../../utils/redux/projects";
 import { useAppSelector } from "../../utils/redux/store";
 import { useNavigate } from "react-router-dom";
 import { openModal } from "../../utils/redux/createTaskModal";
+import { openTaskModal } from "../../utils/redux/taskModal";
 
 // Main Page component
 const HomePage: React.FC = () => {
@@ -126,6 +127,7 @@ const HomePage: React.FC = () => {
                                     />
                                 }
                                 sx={(theme) => ({ marginTop: "16px", color: theme.palette.primary.contrastText })}
+                                onClick={() => dispatch(openTaskModal())}
                             >
                                 Create New Project
                             </Button>
@@ -253,7 +255,7 @@ const HomePage: React.FC = () => {
                                             marginTop: "16px",
                                             color: "#fff",
                                         })}
-                                    >
+                                        >
                                         Create
                                     </Button>
                                     <Button
