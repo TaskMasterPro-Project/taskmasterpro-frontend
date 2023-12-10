@@ -259,6 +259,7 @@ const HomePage: React.FC = () => {
                                             borderColor: theme.palette.primary.contrastText,
                                             color: theme.palette.primary.contrastText,
                                         })}
+                                        onClick={() => {navigate(`/board`)}}
                                     >
                                         Open project Board
                                     </Button>
