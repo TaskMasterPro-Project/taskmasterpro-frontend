@@ -127,7 +127,7 @@ const HomePage: React.FC = () => {
                                     />
                                 }
                                 sx={(theme) => ({ marginTop: "16px", color: theme.palette.primary.contrastText })}
-                                onClick={() => dispatch(openTaskModal())}
+                                
                             >
                                 Create New Project
                             </Button>
@@ -166,6 +166,7 @@ const HomePage: React.FC = () => {
                                         description={task.description}
                                         labels={task.labels}
                                         assignees={task.assignees}
+                                        onClick={() => dispatch(openTaskModal())}
                                     />
                                 ))}
 

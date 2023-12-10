@@ -19,6 +19,7 @@ interface TaskItemProps {
     description: string;
     labels: string[];
     assignees: string[];
+    onClick: () => void;
 }
 
 // Single Task Item component
@@ -27,10 +28,12 @@ export const TaskItem: React.FC<TaskItemProps> = ({
     description,
     labels,
     assignees,
+    onClick,
 }) => {
     const colorMode = useAppSelector((state) => state.users.colorMode);
 
     return (
+      <button onClick={onClick} style={{ all: 'unset', display: 'block', width: '100%',cursor: 'pointer' }}>
         <Paper
             elevation={3}
             sx={(theme) => ({
@@ -68,5 +71,6 @@ export const TaskItem: React.FC<TaskItemProps> = ({
                 </Box>
             </Box>
         </Paper>
+      </button>
     );
 };

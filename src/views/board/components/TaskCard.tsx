@@ -9,12 +9,14 @@ import StyledAvatar from "../../../widgets/StyledAvatar";
 
 type Props = {
     task: Task;
+    onClick: () => void;
 };
 
-function TaskCard({ task }: Props) {
+function TaskCard({ task, onClick }: Props) {
     const colorMode = useAppSelector((state) => state.users.colorMode);
 
     return (
+      <button onClick={onClick} style={{all: 'unset'}}>
         <Paper sx={{ padding: "20px", borderRadius: "20px", border: colorMode == 'light' ? "1px solid black" : 'none' }}>
             <Typography
                 textOverflow="wrap"
@@ -34,6 +36,7 @@ function TaskCard({ task }: Props) {
                 </AvatarGroup>
             </Box>
         </Paper>
+      </button>
     );
 }
 

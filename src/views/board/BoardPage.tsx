@@ -19,6 +19,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import CategoryMenu from "./components/CategoryMenu";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { openModal } from "../../utils/redux/createTaskModal";
+import { openTaskModal } from "../../utils/redux/taskModal";
 import { useDispatch } from "react-redux";
 
 
@@ -194,6 +195,7 @@ function BoardPage({}: Props) {
                                     <TaskCard
                                         key={task.id}
                                         task={task}
+                                        onClick={() => dispatch(openTaskModal())}
                                     ></TaskCard>
                                 ))}
                         </Box>
