@@ -31,7 +31,7 @@ function TaskCard({ task, onClick }: Props) {
                 <ItemDateLabel dueDate={task.dueDate} />
                 <AvatarGroup max={3}>
                     {task.assignees.map((assignee) => (
-                        <StyledAvatar key={assignee.username} name={assignee.firstName.toUpperCase()} colorful={true} width="30px" height="30px" />
+                        <StyledAvatar key={assignee.username} name={assignee.firstName.toUpperCase() + ' ' + assignee.lastName.toUpperCase()} colorful={true} width="30px" height="30px" />
                     ))}
                 </AvatarGroup>
             </Box>

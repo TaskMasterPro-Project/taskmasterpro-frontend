@@ -79,6 +79,7 @@ function BoardPage({}: Props) {
         ]);
         cancelCategoryInput();
     };
+    console.log(members)
 
     return (
         <Box
@@ -112,10 +113,10 @@ function BoardPage({}: Props) {
                 <Box display="flex" gap="10px">
                     <Box display="flex" gap="5px">
                         <AvatarGroup max={4}>
-                            {members.map((member) => (
+                            {members.map((member, index) => (
                                 <StyledAvatar
-                                    key={member.id}
-                                    name={member.name}
+                                    key={index}
+                                    name={member.firstName + member.lastName}
                                     colorful={true}
                                 />
                             ))}
