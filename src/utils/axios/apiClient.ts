@@ -7,7 +7,7 @@ import { ProjectMember } from "../models/ProjectMember";
 
 export const getProjects = async (): Promise<Project[]> => {
     try {
-        const { data } = await axiosInstance.get("/projects");
+        const { data } = await axiosInstance.get("/api/v1/projects");
         return data;
     } catch (error) {
         console.error(error);
@@ -17,7 +17,7 @@ export const getProjects = async (): Promise<Project[]> => {
 
 export const getTasksForProject = async (projectId: number): Promise<Task[]> => {
     try {
-        const { data } = await axiosInstance.get(`/tasks?projectId=${projectId}`);
+        const { data } = await axiosInstance.get(`/api/v1/projects/${projectId}/tasks`);
         return data;
     }
     catch (error) {
@@ -28,7 +28,7 @@ export const getTasksForProject = async (projectId: number): Promise<Task[]> => 
 
 export const getProjectCategories = async (projectId: number): Promise<ProjectCategory[]> => {
     try {
-        const { data } = await axiosInstance.get(`/categories?projectId=${projectId}`);
+        const { data } = await axiosInstance.get(`/api/v1/projects/${projectId}/categories`);
         return data;
     }
     catch (error) {
@@ -39,7 +39,7 @@ export const getProjectCategories = async (projectId: number): Promise<ProjectCa
 
 export const getProjectMembers = async (projectId: number): Promise<ProjectMember[]> => {
     try {
-        const { data } = await axiosInstance.get(`/members?projectId=${projectId}`);
+        const { data } = await axiosInstance.get(`/api/v1/projects/${projectId}/members`);
         return data;
     }
     catch (error) {

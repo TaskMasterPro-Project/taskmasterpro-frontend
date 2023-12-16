@@ -164,7 +164,6 @@ const HomePage: React.FC = () => {
                                         key={task.id}
                                         dueDate={task.dueDate}
                                         description={task.description}
-                                        labels={task.labels}
                                         assignees={task.assignees}
                                         onClick={() => dispatch(openTaskModal())}
                                     />

@@ -113,7 +113,7 @@ function NewTaskModal(){
           <Stack direction='row' spacing={1} alignItems={'center'}>
             <ListIcon sx={{color: theme.palette.text.secondary}}/>
             <FormControl sx={{minWidth: 120}} variant='outlined' size='small'>
-              <InputLabel>Add to list</InputLabel>
+              <InputLabel>Category</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
