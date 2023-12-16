@@ -79,7 +79,7 @@ function BoardPage({}: Props) {
         ]);
         cancelCategoryInput();
     };
-    console.log(members)
+
 
     return (
         <Box

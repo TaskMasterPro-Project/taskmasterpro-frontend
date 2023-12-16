@@ -11,13 +11,18 @@ import { Popover,
   ListItemButton
 } from '@mui/material'
 import { useTheme } from "@mui/material/styles";
+import { useEffect, useState } from 'react';
+import { getProjectMembers } from '../../axios/apiClient';
+import { ProjectMember } from '../ProjectMember';
+import { Project } from '../Project';
 
 interface Props{
-  projectMembers: string[],
-  marginLeft? : string | number,
+  selectedProject: Project | undefined;
+  assignMember: (member: ProjectMember) => void;
+  marginLeft? : string | number;
 }
 
-const AddUsersPopover: React.FC<Props> = ({projectMembers, marginLeft}) => {
+const AddUsersPopover: React.FC<Props> = ({selectedProject, assignMember, marginLeft}) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const theme = useTheme();
 
@@ -31,6 +36,23 @@ const AddUsersPopover: React.FC<Props> = ({projectMembers, marginLeft}) => {
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
+
+  // Get project members to display in the list for picking a member
+  useEffect(() => {
+    if (!selectedProject) {
+      return;
+  }
+    getProjectMembers(selectedProject.id).then((projectMembers: ProjectMember[]) => {
+      setProjectMembers(projectMembers);
+    })
+  }, [selectedProject])
+
+  const [projectMembers, setProjectMembers] = useState<ProjectMember[]>([]);
+
+  //add onClick event to every list item and attach Handleassignee to it
+  //ProjectMembers state should be managed here
+  //When an assignee is added the local projectmembers list will pop that assignee
+  //check if the assignee is already added (via username maybe?)
 
   return (
     <>
@@ -57,14 +79,14 @@ const AddUsersPopover: React.FC<Props> = ({projectMembers, marginLeft}) => {
             }}
           >
             <List disablePadding>
-            {projectMembers.map((member, index) => (
+            {projectMembers.map((member) => (
               <>
-                <ListItem key={index}  disablePadding >
-                <ListItemButton sx={{paddingInline: 1}}>
+                <ListItem key={member.username}  disablePadding>
+                <ListItemButton onClick={() => assignMember(member)} sx={{paddingInline: 1}}>
                   <ListItemAvatar  sx={{ minWidth: '46px' }}>
-                    <StyledAvatar name={member} width='36px' colorful/>
+                    <StyledAvatar name={member.firstName + ' ' + member.lastName} width='36px' colorful/>
                   </ListItemAvatar>
-                  <ListItemText primary={member} />
+                  <ListItemText primary={member.firstName + ' ' + member.lastName} />
                 </ListItemButton>
                 </ListItem>
                 <Divider component="li" />

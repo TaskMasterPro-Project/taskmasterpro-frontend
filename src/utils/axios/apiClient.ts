@@ -26,6 +26,11 @@ export const getTasksForProject = async (projectId: number): Promise<Task[]> => 
     }
 };
 
+export const createTaskForProject = async (projectId: number, task: Task): Promise<Task> => {
+  const { data } = await axiosInstance.post(`/api/v1/projects/${projectId}/tasks`, task);
+  return data;
+};
+
 export const getProjectCategories = async (projectId: number): Promise<ProjectCategory[]> => {
     try {
         const { data } = await axiosInstance.get(`/api/v1/projects/${projectId}/categories`);
