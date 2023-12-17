@@ -17,6 +17,7 @@ function CustomDatePicker({formatDate}: CustomDatePickerProps) {
     setDateValue(newValue);
     formatDate(newValue);
   }
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker 

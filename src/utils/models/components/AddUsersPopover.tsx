@@ -49,11 +49,6 @@ const AddUsersPopover: React.FC<Props> = ({selectedProject, assignMember, margin
 
   const [projectMembers, setProjectMembers] = useState<ProjectMember[]>([]);
 
-  //add onClick event to every list item and attach Handleassignee to it
-  //ProjectMembers state should be managed here
-  //When an assignee is added the local projectmembers list will pop that assignee
-  //check if the assignee is already added (via username maybe?)
-
   return (
     <>
           <IconButton 
@@ -79,9 +74,9 @@ const AddUsersPopover: React.FC<Props> = ({selectedProject, assignMember, margin
             }}
           >
             <List disablePadding>
-            {projectMembers.map((member) => (
-              <>
-                <ListItem key={member.username}  disablePadding>
+            {projectMembers.map((member, index) => (
+              <React.Fragment key={member.username + index}>
+                <ListItem disablePadding>
                 <ListItemButton onClick={() => assignMember(member)} sx={{paddingInline: 1}}>
                   <ListItemAvatar  sx={{ minWidth: '46px' }}>
                     <StyledAvatar name={member.firstName + ' ' + member.lastName} width='36px' colorful/>
@@ -90,7 +85,7 @@ const AddUsersPopover: React.FC<Props> = ({selectedProject, assignMember, margin
                 </ListItemButton>
                 </ListItem>
                 <Divider component="li" />
-              </>
+              </React.Fragment>
             ))}
           </List>
         </Popover>

@@ -4,14 +4,16 @@ import { useAppSelector } from '../../redux/store';
 
 type PrimaryButtonProps = {
   text: string; 
+  onClick?: () => void;
 };
 
-const PrimaryButton: React.FC<PrimaryButtonProps> = ({ text }) => {
+const PrimaryButton: React.FC<PrimaryButtonProps> = ({ text, onClick }) => {
   const colorMode = useAppSelector((state) => state.users.colorMode);
   
   return (
     <Button
     variant="contained"
+    onClick={onClick}
     sx={{
       backgroundColor: (theme) => theme.palette.primary.main,
       borderRadius: 1, 

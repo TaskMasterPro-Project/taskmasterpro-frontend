@@ -58,7 +58,7 @@ const CustomModal: React.FC<CustomModalProps> = ({ open, onClose, title, titleFo
           <CloseIcon />
         </IconButton>
         <DialogTitle sx={{ mb: 1, p: 0, maxWidth: '90%', fontWeight: 'bold', fontSize: titleFontSize }}>
-          <Typography variant='h2' fontSize={'inherit'} fontWeight={'bold'}>{title}</Typography>
+          {title}
         </DialogTitle>
         {children}
       </DialogContent>

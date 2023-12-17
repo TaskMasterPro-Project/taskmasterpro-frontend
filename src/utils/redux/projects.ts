@@ -2,6 +2,7 @@ import { PayloadAction, createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
 import { User } from "../models/User";
 import { Task } from "../models/Task";
+import { NewTask } from '../models/NewTask'
 import { Project } from "../models/Project";
 import { createTaskForProject } from "../axios/apiClient";
 import { RootState } from "./store";
@@ -27,7 +28,7 @@ const projectsSlice = createSlice({
 
 export const createTask = createAsyncThunk(
   'projects/createTask',
-  async (taskData: Task, { getState }) => {
+  async (taskData: NewTask, { getState }) => {
     const state = getState() as RootState;
     const projectId = state.projects.selectedProject?.id;
     if (!projectId) {

@@ -10,7 +10,6 @@ import {
   MenuItem,
   AvatarGroup
 } from '@mui/material';
-import { Task } from '../Task';
 import LabelOutlinedIcon from '@mui/icons-material/LabelOutlined';
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
@@ -19,24 +18,23 @@ import CustomDatePicker from './CustomDatePicker';
 import PrimaryButton from './PrimaryButton';
 import StyledModal from './StyledModal';
 import ItemLabel from '../../../widgets/ItemLabel';
-import StyledAvatar from '../../../widgets/StyledAvatar';
 import { styled, useTheme } from "@mui/material/styles";
 import { secondary } from '../../theme/theme';
 import AddLabelButton from './AddLabelButton';
 import AddUsersPopover from './AddUsersPopover';
-import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { closeModal } from '../../redux/createTaskModal';
 import { ProjectMember } from '../ProjectMember';
 import TaskAssignees from './TaskAssignees';
 import { Assignees } from '../Assignees';
+import { ProjectCategory } from '../ProjectCategory';
 import dayjs, { Dayjs } from 'dayjs';
-import { log } from 'console';
-
-
+import { getProjectCategories } from '../../axios/apiClient';
+import { createTask } from '../../redux/projects';
+import { NewTask } from '../NewTask';
 
 function NewTaskModal(){
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const isNewTaskModalOpen = useAppSelector((state) => state.createTaskModal.isModalOpen);
   const selectedProject = useAppSelector(
     (state) => state.projects.selectedProject
@@ -64,6 +62,11 @@ function NewTaskModal(){
   }
 
   function handleCloseModal(){
+    setTitle('');
+    setDescription('');
+    setDueDate('');
+    setAssignees([]);
+    setCategoryId(null);
     dispatch(closeModal());
   }
   // Check for the theme
@@ -79,12 +82,47 @@ function NewTaskModal(){
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState(''); 
   const [assignees, setAssignees] = useState<Assignees[]>([]); 
-  const [categoryId, setCategoryId] = useState(''); 
-  console.log(dueDate)
+  const [projectCategories, setProjectCategories] = useState<ProjectCategory[]>([])
+  const [categoryId, setCategoryId] = useState<number | null>(null); 
+
+  useEffect(() => {
+    if (!selectedProject) {
+      return;
+  }
+    getProjectCategories(selectedProject.id).then((projectCategories: ProjectCategory[]) => {
+      setProjectCategories(projectCategories);
+    })
+  }, [selectedProject])
+
+  const handleAddTask = () => {
+    if(!validateForm()){
+      alert("Please fill in all required fields."); // You can replace this with a more sophisticated feedback mechanism
+      return;
+    }
+    const assigneesUsernames = assignees.map((assignee) => assignee.username);
+    const newTask: NewTask = {
+      title: title,
+      description: description,
+      dueDate: dueDate, 
+      assignees: assigneesUsernames,
+      categoryId: categoryId,
+    };
+
+    dispatch(createTask(newTask)); 
+    handleCloseModal(); 
+  };
+
+  const validateForm = () => {
+    return title.trim() !== '' && 
+      description.trim() !== '' && 
+      dueDate !== '' && assignees.length !== 0 && 
+      categoryId !== null;
+  };
 
   return(
       <StyledModal open={isNewTaskModalOpen} onClose={handleCloseModal} title='Create new task' titleFontSize={32}>
         <TextField multiline
+            required
             color='secondary'
             placeholder="Create task"
             variant="outlined" 
@@ -148,19 +186,24 @@ function NewTaskModal(){
             <FormControl sx={{minWidth: 120}} variant='outlined' size='small'>
               <InputLabel>Category</InputLabel>
               <Select
-                labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 label="Add to list"
+                required
+                value={categoryId === null ? '' : categoryId}
+                onChange={(event) => {
+                  const value = event.target.value === '' ? null : Number(event.target.value);
+                  setCategoryId(value);
+                }}
               >
-                <MenuItem>None</MenuItem>
-                <MenuItem value={'Todo'}>{'Todo'}</MenuItem>
-                <MenuItem value={'Doing'}>{'Doing'}</MenuItem>
-                <MenuItem value={'Testing'}>{'Testing'}</MenuItem>
+                <MenuItem value=''>None</MenuItem>
+                {projectCategories.map((category) =>
+                <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
+                )}
               </Select>
             </FormControl>
           </Stack>
         </Stack>
-        <PrimaryButton text={'Add task'}/>
+        <PrimaryButton onClick={handleAddTask} text={'Add task'}/>
   </StyledModal>
   )
 }

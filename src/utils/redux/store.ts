@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { TypedUseSelectorHook, useSelector } from "react-redux";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import usersSlice, { UsersSliceState } from "./users";
 import projectsSlice, { ProjectsSliceState } from "./projects";
 import createTaskModalSlice, {CreateTaskModalState} from "./createTaskModal"
@@ -50,6 +50,12 @@ store.subscribe(() => {
     saveToLocalStorage(store.getState());
 });
 
+export type AppDispatch = typeof store.dispatch;
+
+// Export a typed useAppDispatch hook
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+
 export default store;
 export type RootState = ReturnType<typeof store.getState>;
 export const useAppSelector: TypedUseSelectorHook<StoreState> = useSelector;
+
