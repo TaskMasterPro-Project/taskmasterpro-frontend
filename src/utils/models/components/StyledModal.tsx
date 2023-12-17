@@ -16,9 +16,10 @@ interface CustomModalProps {
   children: React.ReactNode;
   titleFontSize: number;
   minWidth?: number
+  onClick?: () => void;
 }
 
-const CustomModal: React.FC<CustomModalProps> = ({ open, onClose, title, titleFontSize, minWidth, children }) => {
+const CustomModal: React.FC<CustomModalProps> = ({ open, onClose, title, titleFontSize, minWidth, onClick, children }) => {
   const theme = useTheme();
   const mode = theme.palette.mode;
 
@@ -57,7 +58,7 @@ const CustomModal: React.FC<CustomModalProps> = ({ open, onClose, title, titleFo
         >
           <CloseIcon />
         </IconButton>
-        <DialogTitle sx={{ mb: 1, p: 0, maxWidth: '90%', fontWeight: 'bold', fontSize: titleFontSize }}>
+        <DialogTitle onClick={onClick} sx={{ mb: 1, p: 0, maxWidth: '90%', cursor: 'pointer', fontWeight: 'bold', fontSize: titleFontSize }}>
           {title}
         </DialogTitle>
         {children}

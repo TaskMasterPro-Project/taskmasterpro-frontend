@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Link,
   Grid,
@@ -13,6 +13,8 @@ import {
   styled,
   TextField,
   Button,
+  Menu,
+  MenuItem,
 } from '@mui/material';
 import LabelOutlinedIcon from '@mui/icons-material/LabelOutlined';
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
@@ -36,6 +38,7 @@ import { getProjectCategories } from '../../axios/apiClient';
 import dayjs, { Dayjs } from 'dayjs';
 import { NewTask } from '../NewTask';
 import PrimaryButton from './PrimaryButton';
+import { deleteTask } from '../../redux/projects';
 
 const StyledSubHeading = styled(Typography)(({theme}) => ({
   variant: 'h4',
@@ -78,6 +81,7 @@ const TaskModal = () => {
     setDueDate(taskDueDate);
     setAssignees(taskAssignees);
     setCategoryId(taskCategoryId);
+    setDescIsEdited(false)
   }, [taskTitle, taskDesc, taskDueDate, taskAssignees, taskCategoryId]);
   //Assignees logic
   function handleSetAssignees(member: ProjectMember) {
@@ -106,6 +110,20 @@ const TaskModal = () => {
     })
   }, [selectedProject])
 
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const handleEditCategory = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleCloseCategoryMenu = () => {
+    setAnchorEl(null);
+  }
+
+  const handleCategoryMenuClick = (categoryId: number) => {
+    setCategoryId(categoryId)
+    handleCloseCategoryMenu();
+  }
+
   // Setting the category name to display it in the modal
   useEffect(() => {
     const foundCategory = projectCategories.find((category) => category.id === categoryId);
@@ -120,8 +138,20 @@ const TaskModal = () => {
 
   //Description logic
   const [descIsEdited, setDescIsEdited] = useState(false);
+  const descriptionFieldRef = useRef<HTMLInputElement>(null);
   function editTaskDescription(){
     setDescIsEdited((prev) => !prev)
+  }
+  useEffect(() => {
+    if (descIsEdited && descriptionFieldRef.current) {
+      descriptionFieldRef.current.focus(); 
+    }
+  }, [descIsEdited]);
+
+  //Editing the title
+  const [editTitle, setEditTitle] = useState(false);
+  function handleEditTitle() {
+    setEditTitle((prev) => !prev);
   }
 
   // Check for the theme
@@ -147,13 +177,43 @@ const TaskModal = () => {
     HandleCloseModal(); 
   };
 
+  const handleDeleteTask = () => {
+    if (window.confirm("Are you sure you want to delete this task?")) {
+      dispatch(deleteTask(taskId));
+      HandleCloseModal(); 
+    }
+  }
+
   return(
-    <StyledModal open={isTaskModalOpen} onClose={HandleCloseModal} title={title} titleFontSize={24} minWidth={630}>
+    <StyledModal open={isTaskModalOpen} onClose={HandleCloseModal} onClick={handleEditTitle} title={editTitle ? '' : title} titleFontSize={24} minWidth={630}>
+      {editTitle ? 
+      <TextField autoFocus sx={{mb: 1}} variant="standard" value={title} onChange={(e) => setTitle(e.target.value)}
+      onKeyDown={(e) => {
+        if(e.key === 'Enter'){
+          handleEditTitle();
+        }
+      }}/>
+      : ''}
       <Box sx={{fontSize: '14px', color: theme.palette.text.secondary, mb: 1 }}>
         {'In List: '}
-        <Link href='#' color='inherit' sx={{":hover": {color: '#14919B', fontWeight: 'bold'}}}>
+        <Button onClick={handleEditCategory} variant='text' color='inherit' sx={{fontSize: '0.8em', ":hover": {color: '#14919B', fontWeight: 'bold',}}}>
           { categoryName }
-        </Link>
+        </Button>
+        <Menu
+          id="category-menu"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleCloseCategoryMenu}
+        >
+          {projectCategories.map((category) => (
+            <MenuItem
+              key={category.id}
+              onClick={() => handleCategoryMenuClick(category.id)}
+            >
+              {category.name}
+            </MenuItem>
+          ))}
+        </Menu>
       </Box>
       <Stack gap={0.5} mt={2}>
         <StyledSubHeading>Description</StyledSubHeading>
@@ -162,8 +222,9 @@ const TaskModal = () => {
               placeholder="Add task description..."
               variant="outlined" 
               fullWidth
+              inputRef={descriptionFieldRef}
               disabled={!descIsEdited}
-              focused={descIsEdited}
+              autoFocus
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               sx={{
@@ -239,7 +300,12 @@ const TaskModal = () => {
             </Box>
           </Grid>
         </Grid>
-        <PrimaryButton onClick={handleEditTask} text={'Edit task'}/>
+        <Stack direction={'row'} gap={1}>
+          <PrimaryButton onClick={handleEditTask} text={'Edit task'}/>
+          <Button onClick={handleDeleteTask} variant="outlined" color="error" sx={{mt: (theme) => theme.spacing(3), width: '20%'}}>
+            Archive
+          </Button>
+        </Stack>
       </Box>
     <CommentsSection />
     </StyledModal>

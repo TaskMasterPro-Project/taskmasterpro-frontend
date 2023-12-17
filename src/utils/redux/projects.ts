@@ -4,7 +4,7 @@ import { User } from "../models/User";
 import { Task } from "../models/Task";
 import { NewTask } from '../models/NewTask'
 import { Project } from "../models/Project";
-import { createTaskForProject } from "../axios/apiClient";
+import { createTaskForProject, deleteTaskForProject } from "../axios/apiClient";
 import { RootState } from "./store";
 
 export interface ProjectsSliceState {
@@ -36,6 +36,19 @@ export const createTask = createAsyncThunk(
     }
     const response = createTaskForProject(projectId, taskData);
     return response;
+  }
+);
+
+export const deleteTask = createAsyncThunk(
+  'projects/deleteTask',
+  async (taskId: number, { getState }) => {
+    const state = getState() as RootState;
+    const projectId = state.projects.selectedProject?.id;
+    if (!projectId) {
+      throw new Error("No project selected");
+    }
+    await deleteTaskForProject(projectId, taskId);
+    return taskId;
   }
 );
 
