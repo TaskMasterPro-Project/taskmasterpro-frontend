@@ -42,6 +42,21 @@ export const createTaskForProject = async (projectId: number, task: NewTask): Pr
   return data;
 };
 
+export const editTaskForProject = async (projectId: number, task: NewTask, taskId: number): Promise<Task> => {
+  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MiIsImlhdCI6MTcwMjgxNTkwNSwiZXhwIjoxNzAyODUxOTA1fQ.HYGhE4UNgCxw_8DZElGVL7tX-ZnFRq3_bpzFM6dc2CxxyidszA2CbgIpcR1uLJQM7Tlza-3bPaTWU0PcIbSFUQ';
+
+  if (!accessToken) {
+    throw new Error('No access token available');
+  }
+  
+  const { data } = await axiosInstance.put(`/api/v1/projects/${projectId}/tasks/${taskId}`, task, {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  });
+  return data;
+}
+
 export const getProjectCategories = async (projectId: number): Promise<ProjectCategory[]> => {
     try {
         const { data } = await axiosInstance.get(`/api/v1/projects/${projectId}/categories`);

@@ -1,70 +1,41 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Link,
   Grid,
   Stack,
-  Avatar, 
-  IconButton,
   FormControl,
   RadioGroup,
   Radio,
   Box,
   FormControlLabel,
-  FormLabel,
-  TextField,
-  Divider,
   useTheme,
   Typography,
   styled,
-  AvatarGroup
+  TextField,
+  Button,
 } from '@mui/material';
 import LabelOutlinedIcon from '@mui/icons-material/LabelOutlined';
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
-import ControlPointOutlinedIcon from '@mui/icons-material/ControlPointOutlined';
 import StyledModal from './StyledModal';
+import { secondary } from '../../theme/theme';
 import CustomDatePicker from './CustomDatePicker';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import CommentsSection from './CommentsSection';
 import ItemLabel from '../../../widgets/ItemLabel';
-import StyledAvatar from '../../../widgets/StyledAvatar';
 import AddUsersPopover from './AddUsersPopover';
 import AddLabelButton from './AddLabelButton';
-import { closeTaskModal } from '../../redux/taskModal';
+import { closeTaskModal, editTask } from '../../redux/taskModal';
 import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../../redux/store';
-
-
-//Dummy data
-const taskContributors = [
-  'Pesho Petrov', 'Marto Petrov', 'Gerogi Petrov', 'Yasuo', 'Spas', 'Milenkov', 'Yorick', 'Martin Bozhilov'
-]
-interface ContributorsProps {
-  taskContributors: string[]; 
-}
-function Contributors({ taskContributors }: ContributorsProps) {
-  if (taskContributors.length === 1) {
-    return (
-      <Stack direction="row" gap={0.5} alignItems="center">
-        <StyledAvatar name={taskContributors[0]} colorful />
-        <Typography variant="body1" fontSize={14}>{taskContributors[0]}</Typography>
-      </Stack>
-    );
-  }
-  return (
-    <AvatarGroup max={5}>
-      {taskContributors.map((contributor, index) => (
-        <StyledAvatar key={index + contributor} name={contributor} colorful />
-      ))}
-    </AvatarGroup>
-  );
-}
-
-
-
-interface TaskModalProps {
-  listName: string;
-}
+import { useAppDispatch, useAppSelector } from '../../redux/store';
+import TaskAssignees from './TaskAssignees';
+import { Assignees } from '../Assignees';
+import { ProjectCategory } from '../ProjectCategory';
+import { ProjectMember } from '../ProjectMember';
+import { getProjectCategories } from '../../axios/apiClient';
+import dayjs, { Dayjs } from 'dayjs';
+import { NewTask } from '../NewTask';
+import PrimaryButton from './PrimaryButton';
 
 const StyledSubHeading = styled(Typography)(({theme}) => ({
   variant: 'h4',
@@ -72,27 +43,147 @@ const StyledSubHeading = styled(Typography)(({theme}) => ({
   color: theme.palette.text.secondary,
 }))
 
-const TaskModal: React.FC<TaskModalProps> = ({ listName }) => {
-  const dispatch = useDispatch();
-  const isTaskModalOpen = useAppSelector((state) => state.taskModal.isTaskModalOpen);
+const TaskModal = () => {
+  const dispatch = useAppDispatch();
+  //task state
+  const { isTaskModalOpen, taskId, taskTitle, taskDesc, taskDueDate, taskAssignees, taskCategoryId } = useAppSelector((state) => state.taskModal);
+  // closing the modal
   function HandleCloseModal(){
+    setTitle('');
+    setDescription('');
+    setDueDate('');
+    setAssignees([]);
+    setCategoryId(null);
+    setCategoryName('');
     dispatch(closeTaskModal())
+  }
+
+  // Get selected project
+  const selectedProject = useAppSelector(
+    (state) => state.projects.selectedProject
+  );
+
+  // local states
+  const [title, setTitle] = useState(taskTitle);
+  const [description, setDescription] = useState(taskDesc);
+  const [dueDate, setDueDate] = useState(taskDueDate); 
+  const [assignees, setAssignees] = useState<Assignees[]>(taskAssignees); 
+  const [projectCategories, setProjectCategories] = useState<ProjectCategory[]>([])
+  const [categoryId, setCategoryId] = useState<number | null>(taskCategoryId); 
+  const [categoryName, setCategoryName] = useState<string | null>(null)
+
+  useEffect(() => {
+    setTitle(taskTitle);
+    setDescription(taskDesc);
+    setDueDate(taskDueDate);
+    setAssignees(taskAssignees);
+    setCategoryId(taskCategoryId);
+  }, [taskTitle, taskDesc, taskDueDate, taskAssignees, taskCategoryId]);
+  //Assignees logic
+  function handleSetAssignees(member: ProjectMember) {
+    const newAssignee = {
+      username: member.username,
+      firstName: member.firstName,
+      lastName: member.lastName,
+      email: member.email
+    };
+  
+    setAssignees(prevAssignees => {
+      if (prevAssignees.some(assignee => assignee.username === newAssignee.username)) {
+        return prevAssignees;
+      }
+      return [...prevAssignees, newAssignee];
+    });
+  }
+
+  //Project categories
+  useEffect(() => {
+    if (!selectedProject) {
+      return;
+  }
+    getProjectCategories(selectedProject.id).then((projectCategories: ProjectCategory[]) => {
+      setProjectCategories(projectCategories);
+    })
+  }, [selectedProject])
+
+  // Setting the category name to display it in the modal
+  useEffect(() => {
+    const foundCategory = projectCategories.find((category) => category.id === categoryId);
+    setCategoryName(foundCategory ? foundCategory.name : '');
+  },[projectCategories, categoryId])
+
+  // date picker logic
+  function handleDateChange(newDate: Dayjs | null) {
+    const formattedDate = newDate ? dayjs(newDate).format('YYYY-MM-DD') : '';
+    setDueDate(formattedDate);
+  }
+
+  //Description logic
+  const [descIsEdited, setDescIsEdited] = useState(false);
+  function editTaskDescription(){
+    setDescIsEdited((prev) => !prev)
   }
 
   // Check for the theme
   const theme = useTheme();
   const mode = theme.palette.mode;
 
+  //Put Request
+  const handleEditTask = () => {
+    // if(!validateForm()){
+    //   alert("Please fill in all required fields."); // You can replace this with a more sophisticated feedback mechanism
+    //   return;
+    // }
+    const assigneesUsernames = assignees.map((assignee) => assignee.username);
+    const newTask: NewTask = {
+      title: title,
+      description: description,
+      dueDate: dueDate, 
+      assignees: assigneesUsernames,
+      categoryId: categoryId,
+    };
+
+    dispatch(editTask(newTask)); 
+    HandleCloseModal(); 
+  };
+
   return(
-    <StyledModal open={isTaskModalOpen} onClose={HandleCloseModal} title='ProjectsController - Create Project, Delete Project, Edit project' titleFontSize={24} minWidth={630}>
-      <Box sx={{fontSize: '14px', color: theme.palette.text.secondary }}>
+    <StyledModal open={isTaskModalOpen} onClose={HandleCloseModal} title={title} titleFontSize={24} minWidth={630}>
+      <Box sx={{fontSize: '14px', color: theme.palette.text.secondary, mb: 1 }}>
         {'In List: '}
         <Link href='#' color='inherit' sx={{":hover": {color: '#14919B', fontWeight: 'bold'}}}>
-          { listName}
+          { categoryName }
         </Link>
       </Box>
+      <Stack gap={0.5} mt={2}>
+        <StyledSubHeading>Description</StyledSubHeading>
+        <Stack direction={'row'} gap={1}>
+          <TextField multiline
+              placeholder="Add task description..."
+              variant="outlined" 
+              fullWidth
+              disabled={!descIsEdited}
+              focused={descIsEdited}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              sx={{
+                backgroundColor: mode === 'dark' ? secondary.secondary700 : '#FAFAFA',
+                borderRadius: '5px',
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '5px',
+                  '&:hover .MuiOutlinedInput-notchedOutline': {
+                    borderColor: '#98AEEB', 
+                  },
+                },
+              }}
+            />
+          <Button variant="text" onClick={editTaskDescription}>
+            {descIsEdited ? 'Save' : 'Edit'}
+          </Button>
+        </Stack>
+      </Stack>
       <Box sx={{ flexGrow: 1, mb:(3) }} >
-        <Grid container spacing={2} mt={2}>
+        <Grid container spacing={2} mt={1} mb={2}>
           <Grid item xs={12} sm={6}>
             <Stack direction={'column'} gap={0.5}>
               <Stack direction="row" spacing={1}>
@@ -100,8 +191,8 @@ const TaskModal: React.FC<TaskModalProps> = ({ listName }) => {
                 <StyledSubHeading>Members</StyledSubHeading>
               </Stack>
               <Stack  direction="row" alignItems={'center'}>
-                <Contributors taskContributors={taskContributors}/>
-                <AddUsersPopover marginLeft='10px' projectMembers={taskContributors}/>
+              <TaskAssignees assignees={assignees}/>
+              <AddUsersPopover marginLeft='10px' selectedProject={selectedProject} assignMember={handleSetAssignees}/>
               </Stack>
             </Stack>
           </Grid>
@@ -126,7 +217,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ listName }) => {
                 <CalendarMonthOutlinedIcon sx={{color: theme.palette.text.secondary}}/>
                 <StyledSubHeading>Due Date</StyledSubHeading>
               </Stack>
-              <CustomDatePicker />
+              <CustomDatePicker taskDate={dueDate} formatDate={handleDateChange}/>
             </Box>
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -148,6 +239,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ listName }) => {
             </Box>
           </Grid>
         </Grid>
+        <PrimaryButton onClick={handleEditTask} text={'Edit task'}/>
       </Box>
     <CommentsSection />
     </StyledModal>

@@ -196,7 +196,7 @@ function BoardPage({}: Props) {
                                     <TaskCard
                                         key={task.id}
                                         task={task}
-                                        onClick={() => dispatch(openTaskModal())}
+                                        onClick={() => console.log('hey')}
                                     ></TaskCard>
                                 ))}
                         </Box>

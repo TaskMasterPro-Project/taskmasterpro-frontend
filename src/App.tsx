@@ -52,7 +52,7 @@ function App() {
                         </Box>
                     )}
                     <NewTaskModal />
-                    <TaskModal listName="To do"/>
+                    <TaskModal />
                 </Box>
             </StyledEngineProvider>
         </ThemeProvider>

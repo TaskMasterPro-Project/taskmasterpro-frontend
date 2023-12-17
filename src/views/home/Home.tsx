@@ -48,7 +48,7 @@ const HomePage: React.FC = () => {
                 .slice(0, 5);
             setTasks(sortedTasks);
         });
-    }, [selectedProject]);
+    }, [selectedProject, tasks]);
 
     return (
         <Box
@@ -165,7 +165,16 @@ const HomePage: React.FC = () => {
                                         dueDate={task.dueDate}
                                         description={task.description}
                                         assignees={task.assignees}
-                                        onClick={() => dispatch(openTaskModal())}
+                                        onClick={() => {
+                                          dispatch(openTaskModal({
+                                          taskId: task.id,
+                                          taskTitle: task.title,
+                                          taskDesc: task.description,
+                                          taskDueDate: task.dueDate,
+                                          taskAssignees: task.assignees,
+                                          taskCategoryId: task.categoryId
+                                        }
+                                        ))}}
                                     />
                                 ))}
 
@@ -255,6 +264,7 @@ const HomePage: React.FC = () => {
                                             marginTop: "16px",
                                             color: "#fff",
                                         })}
+                                        onClick={() => dispatch(openModal())}
                                         >
                                         Create
                                     </Button>

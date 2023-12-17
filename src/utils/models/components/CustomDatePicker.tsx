@@ -3,15 +3,27 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useTheme } from '@mui/material/styles';
-import { useState } from 'react';
-import { Dayjs } from 'dayjs';
+import { useEffect, useState } from 'react';
+import dayjs, { Dayjs } from 'dayjs';
 
 interface CustomDatePickerProps {
   formatDate: (newValue: Dayjs | null) => void;
+  taskDate?: string;
 }
 
-function CustomDatePicker({formatDate}: CustomDatePickerProps) {
-  const [dateValue, setDateValue] = useState<Dayjs | null>(null)
+function convertStringToDate(dateString: string | undefined): Dayjs | null {
+  if (!dateString) {
+      return null; 
+  }
+  return dayjs(dateString);
+}
+
+function CustomDatePicker({formatDate, taskDate}: CustomDatePickerProps) {
+  const [dateValue, setDateValue] = useState<Dayjs | null>(convertStringToDate(taskDate))
+
+    useEffect(() => {
+      setDateValue(convertStringToDate(taskDate));
+    }, [taskDate]);
 
   function dateValueHandler(newValue: Dayjs | null){
     setDateValue(newValue);
