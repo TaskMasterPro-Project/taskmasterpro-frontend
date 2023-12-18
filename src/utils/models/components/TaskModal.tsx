@@ -160,10 +160,6 @@ const TaskModal = () => {
 
   //Put Request
   const handleEditTask = () => {
-    // if(!validateForm()){
-    //   alert("Please fill in all required fields."); // You can replace this with a more sophisticated feedback mechanism
-    //   return;
-    // }
     const assigneesUsernames = assignees.map((assignee) => assignee.username);
     const newTask: NewTask = {
       title: title,
@@ -307,7 +303,7 @@ const TaskModal = () => {
           </Button>
         </Stack>
       </Box>
-    <CommentsSection />
+      {selectedProject && <CommentsSection selectedProject={selectedProject} taskId={taskId} />}
     </StyledModal>
   )
 }

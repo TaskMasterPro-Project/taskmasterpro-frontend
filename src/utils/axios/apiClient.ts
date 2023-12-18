@@ -5,6 +5,8 @@ import { Task } from "../models/Task";
 import { ProjectCategory } from "../models/ProjectCategory";
 import { ProjectMember } from "../models/ProjectMember";
 import { NewTask } from "../models/NewTask";
+import { Comment } from "../models/Comment";
+import { NewComment } from "../models/NewComment";
 
 export const getProjects = async (): Promise<Project[]> => {
     try {
@@ -28,7 +30,7 @@ export const getTasksForProject = async (projectId: number): Promise<Task[]> => 
 };
 
 export const createTaskForProject = async (projectId: number, task: NewTask): Promise<Task> => {
-  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MiIsImlhdCI6MTcwMjc3MTAwMCwiZXhwIjoxNzAyODA3MDAwfQ.9nvrG6yaN4NXj6dWTkAxuFCBezud7skD_jMPxRkeNxljyMEuijqm_RcsUjkdlwlpucmrwiAeP9qbxZYSZDHYxg';
+  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MiIsImlhdCI6MTcwMjg1OTE0MCwiZXhwIjoxNzAyODk1MTQwfQ.opjkH5caW5J3rUnvyid00fcDjfpEm-aYQHBbksJ6Eg6BaFGfbN0S27KYZWKgmbTLTC5I88iF8Y9_rC9AcCsb7w';
 
   if (!accessToken) {
     throw new Error('No access token available');
@@ -43,7 +45,7 @@ export const createTaskForProject = async (projectId: number, task: NewTask): Pr
 };
 
 export const editTaskForProject = async (projectId: number, task: NewTask, taskId: number): Promise<Task> => {
-  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MiIsImlhdCI6MTcwMjgxNTkwNSwiZXhwIjoxNzAyODUxOTA1fQ.HYGhE4UNgCxw_8DZElGVL7tX-ZnFRq3_bpzFM6dc2CxxyidszA2CbgIpcR1uLJQM7Tlza-3bPaTWU0PcIbSFUQ';
+  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MiIsImlhdCI6MTcwMjg1OTE0MCwiZXhwIjoxNzAyODk1MTQwfQ.opjkH5caW5J3rUnvyid00fcDjfpEm-aYQHBbksJ6Eg6BaFGfbN0S27KYZWKgmbTLTC5I88iF8Y9_rC9AcCsb7w';
 
   if (!accessToken) {
     throw new Error('No access token available');
@@ -58,7 +60,7 @@ export const editTaskForProject = async (projectId: number, task: NewTask, taskI
 }
 
 export const deleteTaskForProject = async (projectId: number, taskId: number): Promise<void> => {
-  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MiIsImlhdCI6MTcwMjgxNTkwNSwiZXhwIjoxNzAyODUxOTA1fQ.HYGhE4UNgCxw_8DZElGVL7tX-ZnFRq3_bpzFM6dc2CxxyidszA2CbgIpcR1uLJQM7Tlza-3bPaTWU0PcIbSFUQ'; // Replace with actual token retrieval logic
+  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MiIsImlhdCI6MTcwMjg1OTE0MCwiZXhwIjoxNzAyODk1MTQwfQ.opjkH5caW5J3rUnvyid00fcDjfpEm-aYQHBbksJ6Eg6BaFGfbN0S27KYZWKgmbTLTC5I88iF8Y9_rC9AcCsb7w';
 
   if (!accessToken) {
     throw new Error('No access token available');
@@ -69,6 +71,38 @@ export const deleteTaskForProject = async (projectId: number, taskId: number): P
       'Authorization': `Bearer ${accessToken}`
     }
   });
+};
+
+export const getCommentsForTask = async (projectId: number, taskId: number): Promise<Comment[]> => {
+  try {
+    const { data } = await axiosInstance.get(`/api/v1/projects/${projectId}/tasks/${taskId}/comments`);
+    return data;
+}
+  catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+
+export const createComment = async (projectId: number, taskId: number, commentText: NewComment): Promise<string> => {
+  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MiIsImlhdCI6MTcwMjg1OTE0MCwiZXhwIjoxNzAyODk1MTQwfQ.opjkH5caW5J3rUnvyid00fcDjfpEm-aYQHBbksJ6Eg6BaFGfbN0S27KYZWKgmbTLTC5I88iF8Y9_rC9AcCsb7w';
+
+  if (!accessToken) {
+    throw new Error('No access token available');
+  }
+  try{
+    const { data } = await axiosInstance.post(`/api/v1/projects/${projectId}/tasks/${taskId}/comments`, commentText, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return data;
+  }
+  catch (error){
+    console.error(error)
+    return '';
+  }
 };
 
 export const getProjectCategories = async (projectId: number): Promise<ProjectCategory[]> => {

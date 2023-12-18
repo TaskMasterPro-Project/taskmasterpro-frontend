@@ -1,70 +1,71 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {
   Card,
   CardContent,
   CardHeader,
-  Avatar,
   IconButton,
   TextField,
-  Typography,
   Button,
   Stack,
   Box,
   Menu,
-  MenuItem
+  MenuItem,
+  Typography
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { useTheme } from '@mui/material';
-
 import { secondary } from '../../theme/theme';
 import StyledAvatar from '../../../widgets/StyledAvatar';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import { Comment } from '../Comment';
+import { createComment, getCommentsForTask } from '../../axios/apiClient';
+import { Project } from '../Project';
+import { NewComment } from '../NewComment';
 
-interface Comment {
-  id: string;
-  author: string;
-  text: string;
-  date: string;
+interface commentSectionProps {
+  selectedProject: Project;
+  taskId: number;
 }
 
-const comments: Comment[] = [
-  {
-    id: '1',
-    author: 'Patricia',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    date: '2 days ago',
-  },
-  {
-    id: '2',
-    author: 'James',
-    text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-    date: '1 day ago',
-  },
-  {
-    id: '3',
-    author: 'Louise',
-    text: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-    date: '1 hour ago',
-  },
-  {
-    id: '4',
-    author: 'Yorick',
-    text: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-    date: 'Just now',
-  },
-];
-
-
-const CommentsSection: React.FC = () => {
+const CommentsSection: React.FC<commentSectionProps> = ({selectedProject, taskId}) => {
   const theme = useTheme();
   const mode = theme.palette.mode;
 
-  const [buttonExpanded, setButtonExpanded] = useState(false);
+  //Comments local state
+  const [comments, setComments] = useState<Comment[]>([]);
 
+  // Getting the comments
+  useEffect(() => {
+    if(!selectedProject && taskId){
+      return
+    }
+    getCommentsForTask(selectedProject.id, taskId).then((comments: Comment[]) => {
+      setComments(comments)
+    })
+  }, [comments]) 
+
+  const [buttonExpanded, setButtonExpanded] = useState(false);
   function handleExpandButton(){
     setButtonExpanded((prevState) => !prevState);
+  }
+
+  //Creating a comment
+  const handleCreateComment = async () => {
+      const commentContent: NewComment = {
+        content: newCommentText
+      }
+
+      await createComment(selectedProject.id, taskId, commentContent);
+      setNewCommentText('');
+      setIsTyping(false);
+  }
+  const [newCommentText, setNewCommentText] = useState<string>('');
+  const [isTyping, setIsTyping] = useState(false);
+
+  const handleCancelTyping = () => {
+    setNewCommentText('');
+      setIsTyping(false);
   }
 
   // Comments options logic
@@ -91,29 +92,44 @@ const CommentsSection: React.FC = () => {
   return (
     <Card sx={{  bgcolor: mode === 'dark' ? secondary.secondary900 : secondary.secondary50}}>
       <CardContent>
-        <TextField
-            multiline
-            color='secondary'
-            placeholder="Add a comment..."
-            variant="outlined" 
-            sx={{
-              width: '100%', 
-              backgroundColor: mode === 'dark' ? secondary.secondary700 : '#FAFAFA',
-              borderRadius: '5px',
-              mb: 2,
-              '& .MuiOutlinedInput-root': {
+        <Box sx={{mb: 2}}>
+          <TextField
+              multiline
+              color='secondary'
+              placeholder="Add a comment..."
+              variant="outlined" 
+              value={newCommentText}
+              onChange={(e) => {
+                if (e.target.value !== '') {
+                  setIsTyping(true);
+                } else {
+                  setIsTyping(false);
+                }
+                setNewCommentText(e.target.value)
+              }}
+              sx={{
+                width: '100%', 
+                backgroundColor: mode === 'dark' ? secondary.secondary700 : '#FAFAFA',
                 borderRadius: '5px',
-                '&:hover .MuiOutlinedInput-notchedOutline': {
-                  borderColor: '#98AEEB', 
+                mb: 1,
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '5px',
+                  '&:hover .MuiOutlinedInput-notchedOutline': {
+                    borderColor: '#98AEEB', 
+                  },
                 },
-              },
-            }}
-          />
+              }}
+            />
+          <Stack direction={'row'} gap={1} sx={{display: isTyping ? 'flex' : 'none'}}>
+            <Button variant='outlined' onClick={handleCreateComment} >Save</Button>
+            <Button variant='text' color='error' onClick={handleCancelTyping}>Cancel</Button>
+          </Stack>
+        </Box>
         {comments.map((comment) => (
-          <CardHeader
+            <CardHeader
             key={comment.id}
             avatar={
-              <StyledAvatar name={comment.author} colorful></StyledAvatar>
+              <StyledAvatar name={comment.commentOwner.firstName + ' ' + comment.commentOwner.lastName} colorful></StyledAvatar>
             }
             action={
               <Box>
@@ -139,8 +155,10 @@ const CommentsSection: React.FC = () => {
                 </Menu>
               </Box>
             }
-            title={comment.text}
-            subheader={comment.date}
+            title={comment.commentOwner.firstName + ' ' + comment.commentOwner.lastName}
+            titleTypographyProps={{color: (theme) => theme.palette.text.secondary}}
+            subheader={comment.content}
+            subheaderTypographyProps={{color: (theme) => theme.palette.text.primary}}
             sx={{alignItems: 'flex-start'}}
           />
         ))}
