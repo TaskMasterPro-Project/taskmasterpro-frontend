@@ -108,7 +108,7 @@ const TaskModal = () => {
     getProjectCategories(selectedProject.id).then((projectCategories: ProjectCategory[]) => {
       setProjectCategories(projectCategories);
     })
-  }, [selectedProject])
+  }, [selectedProject, taskId])
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const handleEditCategory = (event: React.MouseEvent<HTMLButtonElement>) => {

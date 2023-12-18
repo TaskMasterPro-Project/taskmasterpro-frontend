@@ -48,7 +48,7 @@ const HomePage: React.FC = () => {
                 .slice(0, 5);
             setTasks(sortedTasks);
         });
-    }, [selectedProject, tasks]);
+    }, [selectedProject]);
 
     return (
         <Box

@@ -30,7 +30,7 @@ export const getTasksForProject = async (projectId: number): Promise<Task[]> => 
 };
 
 export const createTaskForProject = async (projectId: number, task: NewTask): Promise<Task> => {
-  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MiIsImlhdCI6MTcwMjg1OTE0MCwiZXhwIjoxNzAyODk1MTQwfQ.opjkH5caW5J3rUnvyid00fcDjfpEm-aYQHBbksJ6Eg6BaFGfbN0S27KYZWKgmbTLTC5I88iF8Y9_rC9AcCsb7w';
+  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MiIsImlhdCI6MTcwMjg5MTUzMCwiZXhwIjoxNzAyOTI3NTMwfQ.XSha9e8AKUj8OIXPx_EPQce5mnGk38_cRkLe5t6mkRODwwCn3uHwXEVYnV4uzpzIpbiidUDvn3d9aMkMux3xkQ';
 
   if (!accessToken) {
     throw new Error('No access token available');
@@ -45,7 +45,7 @@ export const createTaskForProject = async (projectId: number, task: NewTask): Pr
 };
 
 export const editTaskForProject = async (projectId: number, task: NewTask, taskId: number): Promise<Task> => {
-  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MiIsImlhdCI6MTcwMjg1OTE0MCwiZXhwIjoxNzAyODk1MTQwfQ.opjkH5caW5J3rUnvyid00fcDjfpEm-aYQHBbksJ6Eg6BaFGfbN0S27KYZWKgmbTLTC5I88iF8Y9_rC9AcCsb7w';
+  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MiIsImlhdCI6MTcwMjg5MTUzMCwiZXhwIjoxNzAyOTI3NTMwfQ.XSha9e8AKUj8OIXPx_EPQce5mnGk38_cRkLe5t6mkRODwwCn3uHwXEVYnV4uzpzIpbiidUDvn3d9aMkMux3xkQ';
 
   if (!accessToken) {
     throw new Error('No access token available');
@@ -60,7 +60,7 @@ export const editTaskForProject = async (projectId: number, task: NewTask, taskI
 }
 
 export const deleteTaskForProject = async (projectId: number, taskId: number): Promise<void> => {
-  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MiIsImlhdCI6MTcwMjg1OTE0MCwiZXhwIjoxNzAyODk1MTQwfQ.opjkH5caW5J3rUnvyid00fcDjfpEm-aYQHBbksJ6Eg6BaFGfbN0S27KYZWKgmbTLTC5I88iF8Y9_rC9AcCsb7w';
+  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MiIsImlhdCI6MTcwMjg5MTUzMCwiZXhwIjoxNzAyOTI3NTMwfQ.XSha9e8AKUj8OIXPx_EPQce5mnGk38_cRkLe5t6mkRODwwCn3uHwXEVYnV4uzpzIpbiidUDvn3d9aMkMux3xkQ';
 
   if (!accessToken) {
     throw new Error('No access token available');
@@ -85,7 +85,7 @@ export const getCommentsForTask = async (projectId: number, taskId: number): Pro
 }
 
 export const createComment = async (projectId: number, taskId: number, commentText: NewComment): Promise<string> => {
-  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MiIsImlhdCI6MTcwMjg1OTE0MCwiZXhwIjoxNzAyODk1MTQwfQ.opjkH5caW5J3rUnvyid00fcDjfpEm-aYQHBbksJ6Eg6BaFGfbN0S27KYZWKgmbTLTC5I88iF8Y9_rC9AcCsb7w';
+  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MiIsImlhdCI6MTcwMjg5MTUzMCwiZXhwIjoxNzAyOTI3NTMwfQ.XSha9e8AKUj8OIXPx_EPQce5mnGk38_cRkLe5t6mkRODwwCn3uHwXEVYnV4uzpzIpbiidUDvn3d9aMkMux3xkQ';
 
   if (!accessToken) {
     throw new Error('No access token available');
@@ -104,6 +104,46 @@ export const createComment = async (projectId: number, taskId: number, commentTe
     return '';
   }
 };
+
+export const editComment = async (projectId: number, taskId: number, commentId: number, commentText: NewComment): Promise<string> => {
+  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MiIsImlhdCI6MTcwMjg5MTUzMCwiZXhwIjoxNzAyOTI3NTMwfQ.XSha9e8AKUj8OIXPx_EPQce5mnGk38_cRkLe5t6mkRODwwCn3uHwXEVYnV4uzpzIpbiidUDvn3d9aMkMux3xkQ';
+
+  if (!accessToken) {
+    throw new Error('No access token available');
+  }
+  try{
+    const { data } = await axiosInstance.put(`/api/v1/projects/${projectId}/tasks/${taskId}/comments/${commentId}`, commentText, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return data;
+  }
+  catch (error){
+    console.error(error)
+    return '';
+  }
+}
+
+export const deleteComment = async (projectId: number, taskId: number, commentId: number): Promise<void> => {
+  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MiIsImlhdCI6MTcwMjg5MTUzMCwiZXhwIjoxNzAyOTI3NTMwfQ.XSha9e8AKUj8OIXPx_EPQce5mnGk38_cRkLe5t6mkRODwwCn3uHwXEVYnV4uzpzIpbiidUDvn3d9aMkMux3xkQ';
+
+  if (!accessToken) {
+    throw new Error('No access token available');
+  }
+
+  try{
+    await axiosInstance.delete(`/api/v1/projects/${projectId}/tasks/${taskId}/comments/${commentId}`, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+  }
+  catch(error){
+    console.error(error);
+  }
+}
 
 export const getProjectCategories = async (projectId: number): Promise<ProjectCategory[]> => {
     try {
