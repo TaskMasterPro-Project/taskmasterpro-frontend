@@ -58,7 +58,7 @@ const CustomModal: React.FC<CustomModalProps> = ({ open, onClose, title, titleFo
         >
           <CloseIcon />
         </IconButton>
-        <DialogTitle onClick={onClick} sx={{ mb: 1, p: 0, maxWidth: '90%', cursor: 'pointer', fontWeight: 'bold', fontSize: titleFontSize }}>
+        <DialogTitle onClick={onClick} sx={{ p: 0, maxWidth: '90%', cursor: 'pointer', fontWeight: 'bold', fontSize: titleFontSize }}>
           {title}
         </DialogTitle>
         {children}

@@ -196,7 +196,16 @@ function BoardPage({}: Props) {
                                     <TaskCard
                                         key={task.id}
                                         task={task}
-                                        onClick={() => console.log('hey')}
+                                        onClick={() => {
+                                          dispatch(openTaskModal({
+                                          taskId: task.id,
+                                          taskTitle: task.title,
+                                          taskDesc: task.description,
+                                          taskDueDate: task.dueDate,
+                                          taskAssignees: task.assignees,
+                                          taskCategoryId: task.categoryId
+                                        }
+                                        ))}}
                                     ></TaskCard>
                                 ))}
                         </Box>

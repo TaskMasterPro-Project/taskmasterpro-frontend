@@ -17,7 +17,10 @@ function TaskCard({ task, onClick }: Props) {
 
     return (
       <button onClick={onClick} style={{all: 'unset'}}>
-        <Paper sx={{ padding: "20px", borderRadius: "20px", border: colorMode == 'light' ? "1px solid black" : 'none' }}>
+        <Paper sx={{ cursor: 'pointer', padding: "20px", borderRadius: "20px", border: colorMode == 'light' ? "1px solid black" : 'none', 
+            '&:hover': {
+              border: colorMode === 'light' ? "1px solid #f0f0f0" : '1px solid #98AEEB'
+            }}}>
             <Typography
                 textOverflow="wrap"
                 sx={(theme) => ({

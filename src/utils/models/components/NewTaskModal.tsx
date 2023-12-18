@@ -132,6 +132,7 @@ function NewTaskModal(){
               width: '100%', 
               backgroundColor: mode === 'dark' ? secondary.secondary700 : '#FAFAFA',
               borderRadius: '5px',
+              mt: 1,
               mb: 1,
               '& .MuiOutlinedInput-root': {
                 borderRadius: '5px',
