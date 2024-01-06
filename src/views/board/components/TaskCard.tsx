@@ -9,13 +9,18 @@ import StyledAvatar from "../../../widgets/StyledAvatar";
 
 type Props = {
     task: Task;
+    onClick: () => void;
 };
 
-function TaskCard({ task }: Props) {
+function TaskCard({ task, onClick }: Props) {
     const colorMode = useAppSelector((state) => state.users.colorMode);
 
     return (
-        <Paper sx={{ padding: "20px", borderRadius: "20px", border: colorMode == 'light' ? "1px solid black" : 'none' }}>
+      <button onClick={onClick} style={{all: 'unset'}}>
+        <Paper sx={{ cursor: 'pointer', padding: "20px", borderRadius: "20px", border: colorMode == 'light' ? "1px solid black" : 'none', 
+            '&:hover': {
+              border: colorMode === 'light' ? "1px solid #f0f0f0" : '1px solid #98AEEB'
+            }}}>
             <Typography
                 textOverflow="wrap"
                 sx={(theme) => ({
@@ -29,11 +34,12 @@ function TaskCard({ task }: Props) {
                 <ItemDateLabel dueDate={task.dueDate} />
                 <AvatarGroup max={3}>
                     {task.assignees.map((assignee) => (
-                        <StyledAvatar key={assignee} name={assignee.toUpperCase()} colorful={true} width="30px" height="30px" />
+                        <StyledAvatar key={assignee.username} name={assignee.firstName.toUpperCase() + ' ' + assignee.lastName.toUpperCase()} colorful={true} width="30px" height="30px" />
                     ))}
                 </AvatarGroup>
             </Box>
         </Paper>
+      </button>
     );
 }
 

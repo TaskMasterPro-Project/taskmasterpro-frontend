@@ -59,6 +59,10 @@ const getTheme = (mode: ThemeMode) => createTheme({
       light: '#FACDCD',
       dark: '#A61B1B'
     },
+    text: {
+      primary: mode === 'dark' ? '#fff' : "#000", // default text color
+      secondary: mode === 'dark' ? secondary.secondary100 : secondary.secondary900,
+    },
     // adding all the palettes if needed in single cases
     primaryPalette: primary,
     secondaryPalette: secondary

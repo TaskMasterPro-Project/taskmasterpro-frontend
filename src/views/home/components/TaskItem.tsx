@@ -10,6 +10,7 @@ import {
 import { primary, secondary } from "../../../utils/theme/theme";
 import StyledAvatar from "../../../widgets/StyledAvatar";
 import { useAppSelector } from "../../../utils/redux/store";
+import { Assignees } from "../../../utils/models/Assignees";
 import ItemDateLabel from "../../../widgets/ItemDateLabel";
 import ItemLabel from "../../../widgets/ItemLabel";
 
@@ -17,20 +18,21 @@ import ItemLabel from "../../../widgets/ItemLabel";
 interface TaskItemProps {
     dueDate: string;
     description: string;
-    labels: string[];
-    assignees: string[];
+    assignees: Assignees[];
+    onClick: () => void;
 }
 
 // Single Task Item component
 export const TaskItem: React.FC<TaskItemProps> = ({
     dueDate,
     description,
-    labels,
     assignees,
+    onClick,
 }) => {
     const colorMode = useAppSelector((state) => state.users.colorMode);
 
     return (
+      <button onClick={onClick} style={{ all: 'unset', display: 'block', width: '100%',cursor: 'pointer' }}>
         <Paper
             elevation={3}
             sx={(theme) => ({
@@ -53,20 +55,21 @@ export const TaskItem: React.FC<TaskItemProps> = ({
                         marginTop="10px"
                     >
                         <ItemDateLabel dueDate={dueDate} />
-                        {labels.length > 0 && labels.map((label) => (
+                        {/* {labels.length > 0 && labels.map((label) => (
                             <ItemLabel key={label} label={label} />
-                        ))}
+                        ))} */}
                     </Box>
                 </Box>
                 <Box>
                     <AvatarGroup max={4}>
                         {/* Map your avatars here */}
                         {assignees.map((assignee) => (
-                            <StyledAvatar key={assignee} name={assignee} />
+                            <StyledAvatar key={assignee.username} name={assignee.firstName + ' ' + assignee.lastName} />
                         ))}
                     </AvatarGroup>
                 </Box>
             </Box>
         </Paper>
+      </button>
     );
 };

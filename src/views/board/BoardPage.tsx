@@ -18,11 +18,15 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { Navigate, useNavigate } from "react-router-dom";
 import CategoryMenu from "./components/CategoryMenu";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { openModal } from "../../utils/redux/createTaskModal";
+import { openTaskModal } from "../../utils/redux/taskModal";
+import { useDispatch } from "react-redux";
 
 
 type Props = {};
 
 function BoardPage({}: Props) {
+    const dispatch = useDispatch();
     const [tasks, setTasks] = React.useState<Task[]>([]);
     const [categories, setCategories] = React.useState<ProjectCategory[]>([]);
     const [members, setMembers] = React.useState<ProjectMember[]>([]);
@@ -76,6 +80,7 @@ function BoardPage({}: Props) {
         cancelCategoryInput();
     };
 
+
     return (
         <Box
             flexGrow={1}
@@ -108,10 +113,10 @@ function BoardPage({}: Props) {
                 <Box display="flex" gap="10px">
                     <Box display="flex" gap="5px">
                         <AvatarGroup max={4}>
-                            {members.map((member) => (
+                            {members.map((member, index) => (
                                 <StyledAvatar
-                                    key={member.id}
-                                    name={member.name}
+                                    key={index}
+                                    name={member.firstName + member.lastName}
                                     colorful={true}
                                 />
                             ))}
@@ -191,6 +196,16 @@ function BoardPage({}: Props) {
                                     <TaskCard
                                         key={task.id}
                                         task={task}
+                                        onClick={() => {
+                                          dispatch(openTaskModal({
+                                          taskId: task.id,
+                                          taskTitle: task.title,
+                                          taskDesc: task.description,
+                                          taskDueDate: task.dueDate,
+                                          taskAssignees: task.assignees,
+                                          taskCategoryId: task.categoryId
+                                        }
+                                        ))}}
                                     ></TaskCard>
                                 ))}
                         </Box>
@@ -206,7 +221,7 @@ function BoardPage({}: Props) {
                                 color: theme.palette.primary.contrastText,
                                 alignSelf: "flex-start",
                             })}
-                        >
+                            onClick={() => dispatch(openModal())}>
                             Add a card
                         </Button>
                     </Box>

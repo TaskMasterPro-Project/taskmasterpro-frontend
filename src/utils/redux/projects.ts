@@ -1,6 +1,11 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from 'axios';
 import { User } from "../models/User";
+import { Task } from "../models/Task";
+import { NewTask } from '../models/NewTask'
 import { Project } from "../models/Project";
+import { createTaskForProject, deleteTaskForProject } from "../axios/apiClient";
+import { RootState } from "./store";
 
 export interface ProjectsSliceState {
     selectedProject?: Project;
@@ -18,7 +23,34 @@ const projectsSlice = createSlice({
             state.selectedProject = action.payload;
         },
     },
+
 });
+
+export const createTask = createAsyncThunk(
+  'projects/createTask',
+  async (taskData: NewTask, { getState }) => {
+    const state = getState() as RootState;
+    const projectId = state.projects.selectedProject?.id;
+    if (!projectId) {
+      throw new Error("No project selected");
+    }
+    const response = createTaskForProject(projectId, taskData);
+    return response;
+  }
+);
+
+export const deleteTask = createAsyncThunk(
+  'projects/deleteTask',
+  async (taskId: number, { getState }) => {
+    const state = getState() as RootState;
+    const projectId = state.projects.selectedProject?.id;
+    if (!projectId) {
+      throw new Error("No project selected");
+    }
+    await deleteTaskForProject(projectId, taskId);
+    return taskId;
+  }
+);
 
 export const { setSelectedProject } = projectsSlice.actions;
 export default projectsSlice.reducer;
