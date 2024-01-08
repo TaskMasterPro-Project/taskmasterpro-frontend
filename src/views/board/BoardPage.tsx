@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useAppSelector } from "../../utils/redux/store";
 import { AvatarGroup, Box, Button, TextField, Typography } from "@mui/material";
 import {
+    createCategory,
     getProjectCategories,
     getProjectMembers,
     getTasksForProject,
@@ -30,6 +31,7 @@ function BoardPage({}: Props) {
     const [tasks, setTasks] = React.useState<Task[]>([]);
     const [categories, setCategories] = React.useState<ProjectCategory[]>([]);
     const [members, setMembers] = React.useState<ProjectMember[]>([]);
+    const [newCategoryName, setNewCategoryName] = React.useState(""); 
     const selectedProject = useAppSelector(
         (state) => state.projects.selectedProject
     );
@@ -68,16 +70,18 @@ function BoardPage({}: Props) {
     const addCategory = () => {
         //TODO: send request for creating category, check the response (get the id), then add the category
         console.log("add category");
-        const newCategory: ProjectCategory = {
-            id: 1,
-            name: "Category",
-            position: 4
-        }
-        setCategories([
-            ...categories,
-            newCategory
-        ]);
-        cancelCategoryInput();
+        createCategory(selectedProject!.id, newCategoryName).then((res: any) => {
+            const newCategory: ProjectCategory = {
+                id: res.content,
+                name: newCategoryName,
+            }
+            setCategories([
+                ...categories,
+                newCategory
+            ]);
+            cancelCategoryInput();
+        });
+        
     };
 
 
@@ -258,6 +262,7 @@ function BoardPage({}: Props) {
                     <TextField
                         label="Enter category title"
                         variant="outlined"
+                        onChange={(e) => setNewCategoryName(e.target.value)}
                     />
                     <Box display="flex" gap="10px">
                         <Button

@@ -4,12 +4,14 @@ import usersSlice, { UsersSliceState } from "./users";
 import projectsSlice, { ProjectsSliceState } from "./projects";
 import createTaskModalSlice, {CreateTaskModalState} from "./createTaskModal"
 import TaskModalSlice, {TaskModalState} from "./taskModal"
+import ProjectModalSlice, { ProjectModalState } from "./projectModal";
 
 type StoreState = {
     users: UsersSliceState;
     projects: ProjectsSliceState;
     createTaskModal: CreateTaskModalState;
     taskModal: TaskModalState;
+    projectModal: ProjectModalState
 };
 
 // save to localStorage
@@ -41,7 +43,8 @@ const store = configureStore({
         users: usersSlice,
         projects: projectsSlice,
         createTaskModal: createTaskModalSlice,
-        taskModal: TaskModalSlice
+        taskModal: TaskModalSlice,
+        projectModal: ProjectModalSlice,
     },
     preloadedState: persistedState
 });

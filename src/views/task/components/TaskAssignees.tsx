@@ -1,6 +1,6 @@
 import { AvatarGroup, Stack, Typography } from "@mui/material";
 import StyledAvatar from "../../../widgets/StyledAvatar";
-import { Assignees } from "../Assignees";
+import { Assignees } from "../../../utils/models/Assignees";
 
 interface TaskAssigneesProps {
   assignees: Assignees[]; 

@@ -12,9 +12,9 @@ import { Popover,
 } from '@mui/material'
 import { useTheme } from "@mui/material/styles";
 import { useEffect, useState } from 'react';
-import { getProjectMembers } from '../../axios/apiClient';
-import { ProjectMember } from '../ProjectMember';
-import { Project } from '../Project';
+import { Project } from '../../../utils/models/Project';
+import { ProjectMember } from '../../../utils/models/ProjectMember';
+import { getProjectMembers } from '../../../utils/axios/apiClient';
 
 interface Props{
   selectedProject: Project | undefined;

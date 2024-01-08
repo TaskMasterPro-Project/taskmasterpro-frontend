@@ -7,28 +7,29 @@ import { Project } from "../../utils/models/Project";
 import { Task } from "../../utils/models/Task";
 import { TaskItem } from "./components/TaskItem";
 import { useDispatch } from "react-redux";
-import { setSelectedProject } from "../../utils/redux/projects";
+import { setProjects, setSelectedProject } from "../../utils/redux/projects";
 import { useAppSelector } from "../../utils/redux/store";
 import { useNavigate } from "react-router-dom";
 import { openModal } from "../../utils/redux/createTaskModal";
 import { openTaskModal } from "../../utils/redux/taskModal";
+import { openProjectModal } from "../../utils/redux/projectModal";
 
 // Main Page component
 const HomePage: React.FC = () => {
     const dispatch = useDispatch();
-    const [projects, setProjects] = useState<Project[]>([]);
+    const projects = useAppSelector((state) => state.projects.projects);
     const [tasks, setTasks] = useState<Task[]>([]);
-    
+
     const selectedProject = useAppSelector(
         (state) => state.projects.selectedProject
     );
     const colorMode = useAppSelector((state) => state.users.colorMode);
-    const navigate = useNavigate();    
-
+    const navigate = useNavigate();
 
     useEffect(() => {
         getProjects().then((res) => {
-            setProjects(res);
+            console.log(res)
+            dispatch(setProjects(res));
             if (res.length > 0) {
                 dispatch(setSelectedProject(res[0]));
             }
@@ -44,7 +45,11 @@ const HomePage: React.FC = () => {
             //sort by due date
             //limit to N number of tasks
             const sortedTasks = tasks
-                .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime())
+                .sort(
+                    (a, b) =>
+                        new Date(a.dueDate).getTime() -
+                        new Date(b.dueDate).getTime()
+                )
                 .slice(0, 5);
             setTasks(sortedTasks);
         });
@@ -89,14 +94,15 @@ const HomePage: React.FC = () => {
                                 gap="10px"
                             >
                                 {/* Map your projects here */}
-                                {projects.map((project) => (
+                                {projects && projects.map((project) => (
                                     <Paper
                                         key={project.id}
                                         sx={(theme) => ({
                                             padding: "20px",
                                             borderRadius: "10px",
                                             backgroundColor:
-                                                selectedProject?.id === project.id
+                                                selectedProject?.id ===
+                                                project.id
                                                     ? theme.palette.primary.main
                                                     : "secondary",
                                             "&:hover": {
@@ -126,8 +132,11 @@ const HomePage: React.FC = () => {
                                         })}
                                     />
                                 }
-                                sx={(theme) => ({ marginTop: "16px", color: theme.palette.primary.contrastText })}
-                                
+                                sx={(theme) => ({
+                                    marginTop: "16px",
+                                    color: theme.palette.primary.contrastText,
+                                })}
+                                onClick={() => dispatch(openProjectModal())}
                             >
                                 Create New Project
                             </Button>
@@ -159,24 +168,31 @@ const HomePage: React.FC = () => {
                                 </Typography>
                                 {/* <Divider sx={{ margin: "5px 0", height: "10px" }} /> */}
                                 {/* Map your tasks here */}
-                                {tasks && tasks.map((task) => (
-                                    <TaskItem
-                                        key={task.id}
-                                        dueDate={task.dueDate}
-                                        description={task.description}
-                                        assignees={task.assignees}
-                                        onClick={() => {
-                                          dispatch(openTaskModal({
-                                          taskId: task.id,
-                                          taskTitle: task.title,
-                                          taskDesc: task.description,
-                                          taskDueDate: task.dueDate,
-                                          taskAssignees: task.assignees,
-                                          taskCategoryId: task.categoryId
-                                        }
-                                        ))}}
-                                    />
-                                ))}
+                                {tasks &&
+                                    tasks.map((task) => (
+                                        <TaskItem
+                                            key={task.id}
+                                            dueDate={task.dueDate}
+                                            description={task.description}
+                                            assignees={task.assignees}
+                                            onClick={() => {
+                                                dispatch(
+                                                    openTaskModal({
+                                                        taskId: task.id,
+                                                        taskTitle: task.title,
+                                                        taskDesc:
+                                                            task.description,
+                                                        taskDueDate:
+                                                            task.dueDate,
+                                                        taskAssignees:
+                                                            task.assignees,
+                                                        taskCategoryId:
+                                                            task.categoryId,
+                                                    })
+                                                );
+                                            }}
+                                        />
+                                    ))}
 
                                 <Button
                                     startIcon={
@@ -187,7 +203,11 @@ const HomePage: React.FC = () => {
                                             })}
                                         />
                                     }
-                                    sx={(theme) =>  ({ marginTop: "16px", color: theme.palette.primary.contrastText })}
+                                    sx={(theme) => ({
+                                        marginTop: "16px",
+                                        color: theme.palette.primary
+                                            .contrastText,
+                                    })}
                                     onClick={() => dispatch(openModal())}
                                 >
                                     Create New Task
@@ -237,7 +257,12 @@ const HomePage: React.FC = () => {
                                     You have no upcoming tasks for this project!
                                 </Typography>
                                 <Box width="70%">
-                                    <Typography variant="h6" padding="16px" fontFamily="poppins" lineHeight="28px">
+                                    <Typography
+                                        variant="h6"
+                                        padding="16px"
+                                        fontFamily="poppins"
+                                        lineHeight="28px"
+                                    >
                                         Ready to tackle your goals? Let's get
                                         started by creating a new task and
                                         setting the stage for success. Your
@@ -265,17 +290,22 @@ const HomePage: React.FC = () => {
                                             color: "#fff",
                                         })}
                                         onClick={() => dispatch(openModal())}
-                                        >
+                                    >
                                         Create
                                     </Button>
                                     <Button
                                         variant="outlined"
                                         sx={(theme) => ({
                                             marginTop: "16px",
-                                            borderColor: theme.palette.primary.contrastText,
-                                            color: theme.palette.primary.contrastText,
+                                            borderColor:
+                                                theme.palette.primary
+                                                    .contrastText,
+                                            color: theme.palette.primary
+                                                .contrastText,
                                         })}
-                                        onClick={() => {navigate(`/board`)}}
+                                        onClick={() => {
+                                            navigate(`/board`);
+                                        }}
                                     >
                                         Open project Board
                                     </Button>
@@ -291,19 +321,26 @@ const HomePage: React.FC = () => {
                 justifyContent="flex-end"
                 margin="5px"
             >
-                {projects.length > 0 && (<Button
-                    endIcon={
-                        <ArrowCircleRightIcon
-                            sx={(theme) => ({
-                                color: theme.palette.primary.main,
-                            })}
-                        />
-                    }
-                    sx={(theme) => ({ marginTop: "6px", color: theme.palette.primary.contrastText })}
-                    onClick={() => {navigate(`/board`)}}
-                >
-                    Open Project Board
-                </Button>)}
+                {projects && projects.length > 0 && (
+                    <Button
+                        endIcon={
+                            <ArrowCircleRightIcon
+                                sx={(theme) => ({
+                                    color: theme.palette.primary.main,
+                                })}
+                            />
+                        }
+                        sx={(theme) => ({
+                            marginTop: "6px",
+                            color: theme.palette.primary.contrastText,
+                        })}
+                        onClick={() => {
+                            navigate(`/board`);
+                        }}
+                    >
+                        Open Project Board
+                    </Button>
+                )}
             </Box>
         </Box>
     );

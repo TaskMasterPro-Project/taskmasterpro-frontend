@@ -9,10 +9,12 @@ import { RootState } from "./store";
 
 export interface ProjectsSliceState {
     selectedProject?: Project;
+    projects: Project[];
 }
 
 const initialState: ProjectsSliceState = {
-    selectedProject: undefined
+    selectedProject: undefined,
+    projects: []
 };
 
 const projectsSlice = createSlice({
@@ -21,6 +23,12 @@ const projectsSlice = createSlice({
     reducers: {
         setSelectedProject(state, action: PayloadAction<Project>) {
             state.selectedProject = action.payload;
+        },
+        setProjects(state, action: PayloadAction<Project[]>) {
+            state.projects = action.payload;
+        },
+        addProject(state, action: PayloadAction<Project>) {
+            state.projects = [...state.projects, action.payload];
         },
     },
 
@@ -52,5 +60,5 @@ export const deleteTask = createAsyncThunk(
   }
 );
 
-export const { setSelectedProject } = projectsSlice.actions;
+export const { setSelectedProject, setProjects, addProject } = projectsSlice.actions;
 export default projectsSlice.reducer;

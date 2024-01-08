@@ -20,25 +20,25 @@ import LabelOutlinedIcon from '@mui/icons-material/LabelOutlined';
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import StyledModal from './StyledModal';
-import { secondary } from '../../theme/theme';
 import CustomDatePicker from './CustomDatePicker';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import CommentsSection from './CommentsSection';
 import ItemLabel from '../../../widgets/ItemLabel';
 import AddUsersPopover from './AddUsersPopover';
 import AddLabelButton from './AddLabelButton';
-import { closeTaskModal, editTask } from '../../redux/taskModal';
 import { useDispatch } from 'react-redux';
-import { useAppDispatch, useAppSelector } from '../../redux/store';
 import TaskAssignees from './TaskAssignees';
-import { Assignees } from '../Assignees';
-import { ProjectCategory } from '../ProjectCategory';
-import { ProjectMember } from '../ProjectMember';
-import { getProjectCategories } from '../../axios/apiClient';
 import dayjs, { Dayjs } from 'dayjs';
-import { NewTask } from '../NewTask';
 import PrimaryButton from './PrimaryButton';
-import { deleteTask } from '../../redux/projects';
+import { ProjectMember } from '../../../utils/models/ProjectMember';
+import { useAppDispatch, useAppSelector } from '../../../utils/redux/store';
+import { closeTaskModal, editTask } from '../../../utils/redux/taskModal';
+import { Assignees } from '../../../utils/models/Assignees';
+import { ProjectCategory } from '../../../utils/models/ProjectCategory';
+import { getProjectCategories } from '../../../utils/axios/apiClient';
+import { NewTask } from '../../../utils/models/NewTask';
+import { deleteTask } from '../../../utils/redux/projects';
+import { secondary } from '../../../utils/theme/theme';
 
 const StyledSubHeading = styled(Typography)(({theme}) => ({
   variant: 'h4',
@@ -251,6 +251,7 @@ const TaskModal = () => {
               <TaskAssignees assignees={assignees}/>
               <AddUsersPopover marginLeft='10px' selectedProject={selectedProject} assignMember={handleSetAssignees}/>
               </Stack>
+
             </Stack>
           </Grid>
           <Grid item xs={12} sm={6}>

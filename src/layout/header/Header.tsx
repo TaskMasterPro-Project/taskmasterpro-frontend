@@ -15,8 +15,9 @@ import StyledAvatar from "../../widgets/StyledAvatar";
 import SearchIcon from "@mui/icons-material/Search";
 import { useAppSelector } from "../../utils/redux/store";
 import { useDispatch } from "react-redux";
-import { setColorMode } from "../../utils/redux/users";
+import { setColorMode, setUser } from "../../utils/redux/users";
 import { useNavigate } from "react-router-dom";
+import LogoutIcon from '@mui/icons-material/Logout';
 
 type Props = {};
 
@@ -27,9 +28,15 @@ function Header({}: Props) {
     const Search = styled("div")(({ theme }) => ({
         position: "relative",
         borderRadius: theme.shape.borderRadius,
-        backgroundColor: colorMode == 'dark' ? alpha(theme.palette.common.white, 0.15) : "#fff",
+        backgroundColor:
+            colorMode == "dark"
+                ? alpha(theme.palette.common.white, 0.15)
+                : "#fff",
         "&:hover": {
-            backgroundColor: colorMode == 'dark' ? alpha(theme.palette.common.white, 0.25) : alpha(theme.palette.common.white, 0.65),
+            backgroundColor:
+                colorMode == "dark"
+                    ? alpha(theme.palette.common.white, 0.25)
+                    : alpha(theme.palette.common.white, 0.65),
         },
         marginRight: theme.spacing(2),
         marginLeft: 0,
@@ -119,6 +126,7 @@ function Header({}: Props) {
     const theme = useAppSelector((state) => state.users.colorMode);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const user = useAppSelector((state) => state.users.user);
 
     return (
         <Box
@@ -131,7 +139,11 @@ function Header({}: Props) {
             })}
         >
             <Box display="flex" alignItems="center">
-                <Typography variant="h4" sx={{ fontWeight: "bold", color: "#fff" }} onClick={() => navigate("/")}>
+                <Typography
+                    variant="h4"
+                    sx={{ fontWeight: "bold", color: "#fff" }}
+                    onClick={() => navigate("/")}
+                >
                     TaskMasterPro
                 </Typography>
             </Box>
@@ -145,13 +157,35 @@ function Header({}: Props) {
                         inputProps={{ "aria-label": "search" }}
                     />
                 </Search>
-                <MaterialUISwitch sx={{ m: 1 }} checked={theme == "dark"} onClick={() => dispatch(setColorMode(theme == "dark" ? "light" : "dark"))}/>
-                <IconButton aria-label="show 4 new mails" sx={{marginRight: "10px"}}>
-                    <Badge badgeContent={4} color="error">
-                        <NotificationsIcon sx={{ fontSize: "34px", color: "#fff" }} />
-                    </Badge>
-                </IconButton>
-                <StyledAvatar name={"Test"} />
+                <MaterialUISwitch
+                    sx={{ m: 1 }}
+                    checked={theme == "dark"}
+                    onClick={() =>
+                        dispatch(
+                            setColorMode(theme == "dark" ? "light" : "dark")
+                        )
+                    }
+                />
+                {user != null ? (
+                    <Box display="flex" gap="20px" alignItems="center">
+                        <IconButton
+                            aria-label="show 4 new mails"
+                            sx={{ marginRight: "10px" }}
+                        >
+                            <Badge badgeContent={4} color="error">
+                                <NotificationsIcon
+                                    sx={{ fontSize: "34px", color: "#fff" }}
+                                />
+                            </Badge>
+                        </IconButton>
+                        <StyledAvatar name={user.firstName + " " + user.lastName} />
+                        <LogoutIcon sx={{color: "#fff"}} onClick={() => {
+                            dispatch(setUser(null));
+                            localStorage.removeItem("user");
+                            navigate("/login");
+                        } }></LogoutIcon>
+                    </Box>
+                ) : null}
             </Box>
         </Box>
     );

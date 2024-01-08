@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button';
 import { useTheme } from '@mui/material/styles';
-import { useAppSelector } from '../../redux/store';
+import { useAppSelector } from '../../../utils/redux/store';
 
 type PrimaryButtonProps = {
   text: string; 
